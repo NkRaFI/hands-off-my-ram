@@ -6,9 +6,30 @@ An endless, browser-local, third-person 3D comedy chase game. Ram Sam arrives th
 
 ## Current status
 
-**Pre-production documentation complete. Phase 1 has not started.**
+**Phase 1 foundation and approved asset intake implemented.** Gameplay systems begin in later phases.
 
-This repository intentionally begins with specifications, acceptance criteria, visual references, a locked asset manifest, licence rules, and agent instructions. Asset discovery is complete; Phase 1 downloads and verifies the approved set in one batch. Implement one phase at a time and do not begin the next phase until the current phase is tested and accepted.
+This repository includes specifications, acceptance criteria, visual references, a locked asset manifest, licence rules, and agent instructions. Phase 1 fetched and verified the approved set. Implement one phase at a time and do not begin the next phase until the current phase is tested and accepted.
+
+## Run the Phase 1 scene
+
+Use Node 22.22.2 (see `.nvmrc`) and pnpm 10.33.2. From the repository root:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+Open the local URL printed by Vite, then select **Start scene**. The scene is intentionally empty except for a ground plane, grid, camera, and light. Append `?inspect=1` to the URL to load and preview the locked runtime assets.
+
+```sh
+pnpm typecheck
+pnpm lint
+pnpm test
+pnpm build
+pnpm preview
+```
+
+`pnpm smoke` runs an optional Chrome browser check against a running development server on `127.0.0.1:5173`. It uses the Chrome installation at `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` by default; set `CHROME_PATH` to another Chrome executable if needed. The runtime asset checksums are in `docs/runtime-asset-checksums.csv`; the source and licence records are in `docs/asset-registry.csv` and `docs/licenses/`.
 
 ## Product principles
 
