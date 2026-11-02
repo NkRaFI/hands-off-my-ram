@@ -1,0 +1,60 @@
+runtime_id,source_id,exact_source_file,source_bytes,phase,purpose,conversion_rule
+character.male,CHAR_QUATERNIUS_BASE,Base Characters/Godot - UE/Superhero_Male_FullBody.gltf + .bin,751065,2,Ram Sam Rocket Elon and male NPC base,Pack as GLB and resize/convert referenced textures
+character.female,CHAR_QUATERNIUS_BASE,Base Characters/Godot - UE/Superhero_Female_FullBody.gltf + .bin,1022464,2,Player and female NPC base,Pack as GLB and resize/convert referenced textures
+character.hair.buzzed,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_Buzzed.gltf + .bin,56480,2,Short hair variant,Pack as GLB and reuse shared hair texture
+character.hair.buzzed-female,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_BuzzedFemale.gltf + .bin,57151,2,Short female hair variant,Pack as GLB and reuse shared hair texture
+character.hair.long,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_Long.gltf + .bin,205569,2,Long hair NPC variant,Pack as GLB and reuse shared hair texture
+character.hair.buns,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_Buns.gltf + .bin,229723,2,Buns NPC variant,Pack as GLB and reuse shared hair texture
+animation.core,ANIM_QUATERNIUS_CORE,Unreal-Godot/UAL1_Standard.glb,7618436,2,Core animation container,Retain only named clips where tooling safely supports pruning
+animation.idle,ANIM_QUATERNIUS_CORE,clip: Idle_Loop,,2,Default idle,Reference clip from animation.core
+animation.talk,ANIM_QUATERNIUS_CORE,clip: Idle_Talking_Loop,,6,Dialogue gesture,Reference clip from animation.core
+animation.walk,ANIM_QUATERNIUS_CORE,clip: Walk_Loop,,2,Walking,Reference clip from animation.core
+animation.jog,ANIM_QUATERNIUS_CORE,clip: Jog_Fwd_Loop,,2,Running,Reference clip from animation.core
+animation.sprint,ANIM_QUATERNIUS_CORE,clip: Sprint_Loop,,4,Fast chase,Reference clip from animation.core
+animation.hit-chest,ANIM_QUATERNIUS_CORE,clip: Hit_Chest,,5,Cartoon hit reaction,Reference clip from animation.core
+animation.hit-head,ANIM_QUATERNIUS_CORE,clip: Hit_Head,,5,Alternate cartoon hit reaction,Reference clip from animation.core
+animation.bat-swing,ANIM_QUATERNIUS_CORE,clip: Sword_Attack,,5,Bat attack retargeted from sword swing,Reference clip from animation.core
+animation.action,ANIM_QUATERNIUS_ACTION,Unreal-Godot/UAL2_Standard.glb,8091444,7,Supplemental assistance/action container,Defer load until needed
+animation.knockback,ANIM_QUATERNIUS_ACTION,clip: Hit_Knockback,,5,Strong cartoon reaction,Reference clip from animation.action
+animation.rocket-idle,ANIM_QUATERNIUS_ACTION,clip: Idle_FoldArms_Loop,,7,Rocket Elon panel pose,Reference clip from animation.action
+city.building.large,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Building_Large_2.gltf + .bin,3368108,3,Large city building,Pack as GLB and share converted texture set
+city.building.medium,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Building_Medium_2_001.gltf + .bin,2468532,3,Medium city building,Pack as GLB and share converted texture set
+city.building.small,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Building_Small_1.gltf + .bin,1583535,3,Small city building,Pack as GLB and share converted texture set
+city.street.straight,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Street_2Lane.gltf + .bin,22276,3,Straight street,Pack as GLB
+city.street.t,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Street_TIntersection.gltf + .bin,65074,3,T intersection,Pack as GLB
+city.street.cross,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Street_4WayIntersection.gltf + .bin,60792,3,Four-way intersection,Pack as GLB
+city.street.curve,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Street_Curve_2Lane.gltf + .bin,32653,3,Curved street,Pack as GLB
+city.sidewalk.straight,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Sidewalk_Straight_3m.gltf + .bin,6882,3,Straight sidewalk,Pack as GLB
+city.sidewalk.corner,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Sidewalk_Corner_Round_3m.gltf + .bin,11620,3,Sidewalk corner,Pack as GLB
+city.prop.bollard,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Prop_Bollard.gltf + .bin,12534,3,Street dressing,Pack as GLB
+city.prop.planter,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Prop_Planter_Single.gltf + .bin,13560,3,Street dressing,Pack as GLB
+prop.bat,PROP_POLYPIZZA_BAT,66659244-e1d4-4a55-8135-e570818e8190.glb,31240,5,Player bat,Rename only unless validation requires optimization
+prop.ram,PROP_POLYPIZZA_RAM,59e547df-c0e3-457f-929f-118d88015d15.glb,62872,4,RAM stick and collectible,Rename only unless validation requires optimization
+prop.rocket,PROP_POLYPIZZA_ROCKET,244c027c-40f0-45ca-a707-0f8e855c9831.glb,63396,7,Space Assist rocket,Rename only unless validation requires optimization
+ui.key.w,UI_KENNEY_INPUT_PROMPTS,Keyboard & Mouse/Default/keyboard_w.png,387,2,Move forward,Rename only
+ui.key.a,UI_KENNEY_INPUT_PROMPTS,Keyboard & Mouse/Default/keyboard_a.png,380,2,Move left,Rename only
+ui.key.s,UI_KENNEY_INPUT_PROMPTS,Keyboard & Mouse/Default/keyboard_s.png,383,2,Move backward,Rename only
+ui.key.d,UI_KENNEY_INPUT_PROMPTS,Keyboard & Mouse/Default/keyboard_d.png,347,2,Move right,Rename only
+ui.key.space,UI_KENNEY_INPUT_PROMPTS,Keyboard & Mouse/Default/keyboard_space.png,389,5,Attack/confirm prompt,Rename only
+ui.mouse.left,UI_KENNEY_INPUT_PROMPTS,Keyboard & Mouse/Default/mouse_left.png,463,5,Attack prompt,Rename only
+ui.button.blue,UI_KENNEY_UI_PACK,PNG/Blue/Default/button_rectangle_depth_flat.png,383,1,Primary temporary button,Rename only
+ui.button.green,UI_KENNEY_UI_PACK,PNG/Green/Default/button_rectangle_depth_flat.png,383,1,Positive temporary button,Rename only
+sfx.footstep.0,SFX_KENNEY_IMPACTS,Audio/footstep_concrete_000.ogg,5808,9,Concrete footstep,Rename only
+sfx.footstep.1,SFX_KENNEY_IMPACTS,Audio/footstep_concrete_001.ogg,6308,9,Concrete footstep alternate,Rename only
+sfx.bat.0,SFX_KENNEY_IMPACTS,Audio/impactPlank_medium_000.ogg,12016,9,Bat swing impact,Rename only
+sfx.bat.1,SFX_KENNEY_IMPACTS,Audio/impactPlank_medium_001.ogg,12082,9,Bat swing impact alternate,Rename only
+sfx.hit.0,SFX_KENNEY_IMPACTS,Audio/impactPunch_medium_000.ogg,8800,9,Cartoon hit,Rename only
+sfx.hit.1,SFX_KENNEY_IMPACTS,Audio/impactPunch_medium_001.ogg,8701,9,Cartoon hit alternate,Rename only
+sfx.portal.0,SFX_KENNEY_INTERFACE,Audio/glitch_001.ogg,5121,9,Portal layer,Rename only and layer with code synthesis
+sfx.portal.1,SFX_KENNEY_INTERFACE,Audio/glitch_002.ogg,5473,9,Portal alternate layer,Rename only and layer with code synthesis
+sfx.pickup,SFX_KENNEY_INTERFACE,Audio/confirmation_001.ogg,8968,9,RAM pickup,Rename only
+sfx.drop,SFX_KENNEY_INTERFACE,Audio/drop_001.ogg,5859,9,RAM drop,Rename only
+sfx.assist,SFX_KENNEY_INTERFACE,Audio/maximize_005.ogg,20900,9,Space Assist activation,Rename only
+sfx.ui.click,SFX_KENNEY_INTERFACE,Audio/click_001.ogg,4876,9,UI click,Rename only
+sfx.ui.select,SFX_KENNEY_INTERFACE,Audio/select_001.ogg,5468,9,UI selection,Rename only
+sfx.ui.error,SFX_KENNEY_INTERFACE,Audio/error_001.ogg,7373,9,UI error,Rename only
+music.menu,MUSIC_OGA_ACTION5,Juhani Junkala [Retro Game Music Pack] Title Screen.wav,1992686,9,Menu and start screen,Convert to browser-compatible compressed audio
+music.explore,MUSIC_OGA_ACTION5,Juhani Junkala [Retro Game Music Pack] Level 1.wav,13098822,9,Exploration loop,Convert to browser-compatible compressed audio
+music.chase,MUSIC_OGA_ACTION5,Juhani Junkala [Retro Game Music Pack] Level 2.wav,12841642,9,Chase loop,Convert to browser-compatible compressed audio
+music.crisis,MUSIC_OGA_ACTION5,Juhani Junkala [Retro Game Music Pack] Level 3.wav,14446802,9,Cloud takeover crisis,Convert to browser-compatible compressed audio
+music.assist,MUSIC_OGA_ACTION5,Juhani Junkala [Retro Game Music Pack] Ending.wav,7876878,9,Space Assist and reward sting,Convert and edit a short derivative clip
