@@ -6,11 +6,11 @@ An endless, browser-local, third-person 3D comedy chase game. Ram Sam arrives th
 
 ## Current status
 
-**Phase 1 foundation and approved asset intake implemented.** Gameplay systems begin in later phases.
+**Phase 2 player movement and camera implemented.** The test area now contains an approved placeholder character with idle and jog animations.
 
 This repository includes specifications, acceptance criteria, visual references, a locked asset manifest, licence rules, and agent instructions. Phase 1 fetched and verified the approved set. Implement one phase at a time and do not begin the next phase until the current phase is tested and accepted.
 
-## Run the Phase 1 scene
+## Run the movement test
 
 Use Node 22.22.2 (see `.nvmrc`) and pnpm 10.33.2. From the repository root:
 
@@ -19,7 +19,7 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open the local URL printed by Vite, then select **Start scene**. The scene is intentionally empty except for a ground plane, grid, camera, and light. Append `?inspect=1` to the URL to load and preview the locked runtime assets.
+Open the local URL printed by Vite, then select **Start movement test**. Use WASD or arrow keys to move and Escape or the on-screen button to pause and resume. The light border marks the collision boundary. The camera follows the player. Append `?inspect=1` to the URL to load and preview the locked runtime assets from Phase 1.
 
 ```sh
 pnpm typecheck
@@ -29,7 +29,7 @@ pnpm build
 pnpm preview
 ```
 
-`pnpm smoke` runs an optional Chrome browser check against a running development server on `127.0.0.1:5173`. It uses the Chrome installation at `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` by default; set `CHROME_PATH` to another Chrome executable if needed. The runtime asset checksums are in `docs/runtime-asset-checksums.csv`; the source and licence records are in `docs/asset-registry.csv` and `docs/licenses/`.
+`pnpm smoke` runs a Chrome browser check against a running development server on `127.0.0.1:5173`. It uses the Chrome installation at `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` by default; set `CHROME_PATH` to another Chrome executable if needed. Set `SMOKE_URL` to check a production preview on another port. The runtime asset checksums are in `docs/runtime-asset-checksums.csv`; the source and licence records are in `docs/asset-registry.csv` and `docs/licenses/`.
 
 ## Product principles
 

@@ -12,3 +12,8 @@ button { font: inherit; cursor: pointer; padding: .7rem 1.1rem; border: 0; borde
 .loading { position: absolute; z-index: 1; bottom: 1rem; left: 1rem; }
 .inspection { position: absolute; z-index: 1; right: 1rem; bottom: 1rem; width: min(22rem, calc(100vw - 2rem)); padding: .75rem; border-radius: .4rem; background: #162333e8; }
 .inspection p { margin: .5rem 0 0; font-size: .8rem; overflow-wrap: anywhere; }
+.controls { position: absolute; z-index: 1; right: 1rem; bottom: 1rem; width: min(23rem, calc(100vw - 2rem)); padding: .75rem; border-radius: .4rem; background: #162333e8; }
+.controls p { margin: 0 0 .4rem; font-size: .85rem; }
+.controls button { padding: .45rem .8rem; }
+.pause-overlay { position: absolute; z-index: 2; inset: 0; display: grid; place-content: center; justify-items: center; gap: 1rem; background: #16233399; }
+.pause-overlay p { margin: 0; font-size: 2rem; font-weight: 700; }

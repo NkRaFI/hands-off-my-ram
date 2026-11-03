@@ -1,6 +1,10 @@
-import { Component, useState, type ErrorInfo, type ReactNode } from 'react'
+import { Component, useCallback, useEffect, useRef, useState, type ErrorInfo, type ReactNode } from 'react'
 import { Canvas } from '@react-three/fiber'
 import type { Group } from 'three'
+import { PlayerScene } from './scene/PlayerScene'
+import type { Motion } from './game/player/movement'
+
+const MOVEMENT_KEYS = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight'])
 
 class SceneErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false }
@@ -24,8 +28,43 @@ export default function App() {
   const inspectionMode = new URLSearchParams(window.location.search).has('inspect')
   const [started, setStarted] = useState(inspectionMode)
   const [ready, setReady] = useState(false)
+  const [modelReady, setModelReady] = useState(false)
+  const [paused, setPaused] = useState(false)
+  const [motion, setMotion] = useState<Motion>('idle')
+  const [position, setPosition] = useState<[number, number, number]>([0, 0.87, 0])
+  const pressed = useRef(new Set<string>())
   const [inspection, setInspection] = useState('')
   const [preview, setPreview] = useState<Group | null>(null)
+  const onModelLoaded = useCallback(() => setModelReady(true), [])
+  const onPositionChange = useCallback((x: number, y: number, z: number) => setPosition([x, y, z]), [])
+
+  useEffect(() => {
+    if (!started || inspectionMode) return
+    const pressedKeys = pressed.current
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.code === 'Escape') {
+        pressedKeys.clear()
+        setPaused((wasPaused) => !wasPaused)
+      } else if (MOVEMENT_KEYS.has(event.code)) {
+        event.preventDefault()
+        if (!paused) pressedKeys.add(event.code)
+      }
+    }
+    const onKeyUp = (event: KeyboardEvent) => pressedKeys.delete(event.code)
+    const onBlur = () => { pressedKeys.clear(); setPaused(true) }
+    const onVisibility = () => { if (document.hidden) onBlur() }
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('keyup', onKeyUp)
+    window.addEventListener('blur', onBlur)
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('keyup', onKeyUp)
+      window.removeEventListener('blur', onBlur)
+      document.removeEventListener('visibilitychange', onVisibility)
+      pressedKeys.clear()
+    }
+  }, [started, inspectionMode, paused])
 
   async function runInspection() {
     setInspection('Checking approved assets…')
@@ -41,32 +80,54 @@ export default function App() {
     <main className="app">
       <header className="status">
         <h1>Hands Off My RAM!</h1>
-        <p>Phase 1 scene preview</p>
+        <p>{inspectionMode ? 'Approved asset inspection' : 'Phase 2 movement test'}</p>
       </header>
       {!started ? (
         <div className="overlay">
-          <p>A local 3D comedy chase game is taking shape.</p>
-          <button type="button" onClick={() => setStarted(true)}>Start scene</button>
+          <p>Move the player around the test area.</p>
+          <button type="button" onClick={() => setStarted(true)}>Start movement test</button>
         </div>
       ) : (
         <SceneErrorBoundary>
-          {!ready && <p className="loading" role="status">Loading scene…</p>}
+          {(!ready || (!inspectionMode && !modelReady)) && <p className="loading" role="status">Loading scene…</p>}
           <Canvas
-            aria-label="Empty 3D scene"
-            camera={{ position: [7, 6, 9], fov: 50 }}
+            aria-label={inspectionMode ? 'Approved asset inspection scene' : '3D player test area'}
+            camera={{ position: [0, 3.5, 5.5], fov: 50 }}
             dpr={[1, 2]}
             onCreated={() => setReady(true)}
           >
-            <color attach="background" args={['#a8d7ed']} />
-            <ambientLight intensity={1.4} />
-            <directionalLight position={[5, 9, 4]} intensity={2} />
-            <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-              <planeGeometry args={[40, 40]} />
-              <meshStandardMaterial color="#7cbf89" />
-            </mesh>
-            <gridHelper args={[40, 40, '#73a982', '#73a982']} position={[0, 0.01, 0]} />
-            {preview && <primitive object={preview} />}
+            {inspectionMode ? (
+              <>
+                <color attach="background" args={['#a8d7ed']} />
+                <ambientLight intensity={1.4} />
+                <directionalLight position={[5, 9, 4]} intensity={2} />
+                <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+                  <planeGeometry args={[40, 40]} />
+                  <meshStandardMaterial color="#7cbf89" />
+                </mesh>
+                <gridHelper args={[40, 40, '#73a982', '#73a982']} position={[0, 0.01, 0]} />
+                {preview && <primitive object={preview} />}
+              </>
+            ) : (
+              <PlayerScene pressed={pressed} paused={paused} motion={motion} onMotionChange={setMotion} onModelLoaded={onModelLoaded} onPositionChange={onPositionChange} />
+            )}
           </Canvas>
+          {!inspectionMode && (
+            <aside className="controls">
+              <p>WASD or arrow keys to move · Esc to pause</p>
+              <p>State: {paused ? 'Paused' : motion === 'run' ? 'Running' : 'Idle'}</p>
+              <p data-testid="player-position">Position: {position.map((value) => value.toFixed(1)).join(', ')}</p>
+              <button type="button" onClick={() => { pressed.current.clear(); setPaused((value) => !value) }}>
+                {paused ? 'Resume' : 'Pause'}
+              </button>
+            </aside>
+          )}
+          {paused && !inspectionMode && (
+            <div className="pause-overlay">
+              <p>Paused</p>
+              <button type="button" onClick={() => setPaused(false)}>Resume movement</button>
+            </div>
+          )}
           {inspectionMode && (
             <aside className="inspection">
               <button type="button" onClick={runInspection}>Inspect approved assets</button>

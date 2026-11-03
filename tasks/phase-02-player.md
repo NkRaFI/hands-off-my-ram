@@ -28,3 +28,12 @@ Add a placeholder player that can traverse a bounded test area with a comfortabl
 - The camera follows without severe jitter or clipping.
 - Resize and pause/resume do not break controls.
 - Phase checks pass and no later gameplay systems are introduced.
+
+## Manual test
+
+1. Start the development server, begin the movement test, and confirm the approved character appears and idles on the ground.
+2. Hold WASD and arrow keys, including diagonal input, and confirm the jog animation and follow camera respond smoothly.
+3. Move against each boundary and confirm the player stays inside and on the ground.
+4. Pause with Escape or the button, release the keys, resume, and confirm movement works without a stuck direction.
+5. Resize from desktop to a narrow mobile width and continue keyboard movement. Check that the camera and canvas remain usable.
+6. Check the browser console for errors and repeat the scene check in production preview.

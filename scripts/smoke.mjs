@@ -9,6 +9,12 @@ const baseUrl = process.env.SMOKE_URL || 'http://127.0.0.1:5173/'
 
 try {
   const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
+  const position = async () => {
+    const text = await page.getByTestId('player-position').textContent()
+    const match = text?.match(/Position: (-?\d+\.\d+), (-?\d+\.\d+), (-?\d+\.\d+)/)
+    if (!match) throw new Error(`Missing player position: ${text}`)
+    return { x: Number(match[1]), y: Number(match[2]), z: Number(match[3]) }
+  }
   const errors = []
   page.on('pageerror', (error) => errors.push(error.message))
   page.on('console', (message) => {
@@ -18,10 +24,32 @@ try {
     if (response.status() >= 400) errors.push(`${response.status()} ${response.url()}`)
   })
   await page.goto(baseUrl, { waitUntil: 'networkidle' })
-  await page.getByRole('button', { name: 'Start scene' }).click()
+  await page.getByRole('button', { name: 'Start movement test' }).click()
   await page.locator('canvas').waitFor()
   await page.locator('.loading').waitFor({ state: 'hidden' })
   const desktop = await page.locator('canvas').boundingBox()
+  await page.keyboard.down('w')
+  await page.waitForTimeout(700)
+  const moving = await position()
+  if (moving.z > -1.5) throw new Error(`Player did not move forward: ${JSON.stringify(moving)}`)
+  await page.waitForTimeout(2200)
+  await page.keyboard.up('w')
+  await page.waitForTimeout(150)
+  const boundary = await position()
+  if (boundary.z < -9.9 || boundary.z > -9.2) throw new Error(`Player crossed the test boundary: ${JSON.stringify(boundary)}`)
+  if (boundary.y < 0.7 || boundary.y > 1.1) throw new Error(`Player fell through or floated above the ground: ${JSON.stringify(boundary)}`)
+  await page.keyboard.press('Escape')
+  await page.keyboard.down('d')
+  await page.waitForTimeout(350)
+  await page.keyboard.up('d')
+  const whilePaused = await position()
+  if (Math.abs(whilePaused.x - boundary.x) > 0.1) throw new Error('Player moved while paused')
+  await page.keyboard.press('Escape')
+  await page.keyboard.down('d')
+  await page.waitForTimeout(400)
+  await page.keyboard.up('d')
+  const resumed = await position()
+  if (resumed.x < boundary.x + 0.8) throw new Error('Player did not resume movement')
   await page.setViewportSize({ width: 390, height: 844 })
   await page.waitForFunction(() => {
     const box = document.querySelector('canvas')?.getBoundingClientRect()
@@ -31,6 +59,11 @@ try {
   if (!desktop || !mobile || Math.abs(desktop.width - 1280) > 2 || Math.abs(mobile.width - 390) > 2 || Math.abs(mobile.height - 844) > 2) {
     throw new Error(`Canvas did not resize: ${JSON.stringify({ desktop, mobile })}`)
   }
+  await page.keyboard.down('ArrowLeft')
+  await page.waitForTimeout(350)
+  await page.keyboard.up('ArrowLeft')
+  const afterResize = await position()
+  if (afterResize.x > resumed.x - 0.5) throw new Error('Arrow key movement failed after resize')
 
   await page.goto(new URL('?inspect=1', baseUrl).toString(), { waitUntil: 'networkidle' })
   await page.getByRole('button', { name: 'Inspect approved assets' }).click()
@@ -38,7 +71,7 @@ try {
   const result = await page.getByRole('status').last().textContent()
   if (!result?.includes('All approved runtime assets loaded successfully.')) throw new Error(result || 'Inspection failed')
   if (errors.length) throw new Error(`Browser console errors: ${errors.join(' | ')}`)
-  console.log('Desktop and mobile canvas resize passed; all approved assets loaded; browser console clean.')
+  console.log('Player movement, boundary, pause/resume, resize, approved assets, and browser console passed.')
 } finally {
   await browser.close()
 }
