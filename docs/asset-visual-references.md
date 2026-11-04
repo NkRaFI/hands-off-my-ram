@@ -22,7 +22,7 @@ The player, Ram Sam, Rocket Elon, and male NPCs use finished clothed models from
 | `ENV_KENNEY_ROADS` | Matching roads, paving, street lamps, and crossing | [City Kit Roads — Kenney](https://kenney.nl/assets/city-kit-roads) |
 | `ENV_KENNEY_NATURE` | Matching low-poly trees and bushes | [Nature Kit — Kenney](https://kenney.nl/assets/nature-kit) |
 
-The reference image is a color-and-composition target, not a promise that the unmodified packs look identical. The active Phase 3 map composes and lights the three Kenney packs above; further visual polish belongs to later documented phases.
+The reference image is a color-and-composition target, not a promise that the unmodified packs look identical. Phase 3 establishes the playable Kenney map; Phase 10 must finish its landmark presentation, public-space detail, palette, and lighting before the MVP is complete.
 
 ## Gameplay props
 
