@@ -1,6 +1,6 @@
 runtime_id,source_id,exact_source_file,source_bytes,phase,purpose,conversion_rule
-character.male,CHAR_QUATERNIUS_BASE,Base Characters/Godot - UE/Superhero_Male_FullBody.gltf + .bin,751065,2,Ram Sam Rocket Elon and male NPC base,Pack as GLB and resize/convert referenced textures
-character.female,CHAR_QUATERNIUS_BASE,Base Characters/Godot - UE/Superhero_Female_FullBody.gltf + .bin,1022464,2,Player and female NPC base,Pack as GLB and resize/convert referenced textures
+character.male,CHAR_QUATERNIUS_BASE,Base Characters/Godot - UE/Superhero_Male_FullBody.gltf + .bin,751065,2,Player Ram Sam Rocket Elon and male NPC base,Pack as GLB and resize/convert referenced textures
+character.female,CHAR_QUATERNIUS_BASE,Base Characters/Godot - UE/Superhero_Female_FullBody.gltf + .bin,1022464,2,Female NPC base,Pack as GLB and resize/convert referenced textures
 character.hair.buzzed,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_Buzzed.gltf + .bin,56480,2,Short hair variant,Pack as GLB and reuse shared hair texture
 character.hair.buzzed-female,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_BuzzedFemale.gltf + .bin,57151,2,Short female hair variant,Pack as GLB and reuse shared hair texture
 character.hair.long,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_Long.gltf + .bin,205569,2,Long hair NPC variant,Pack as GLB and reuse shared hair texture

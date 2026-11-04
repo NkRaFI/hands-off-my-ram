@@ -24,6 +24,9 @@
 | 2026-11-03 | Downtown pack supplies streets | Its audited Standard archive contains the required road and sidewalk pieces, making Modular Streets redundant |
 | 2026-11-03 | Phase 1 runtime music uses AAC in M4A containers | The available local encoder produced browser-compatible compressed files within the static payload budget; Phase 9 still owns music editing and playback |
 | 2026-11-03 | Phase 2 uses a fixed rear follow camera and Rapier capsule collision | This keeps the first movement test predictable and leaves camera orbit and detailed presentation for later phases |
+| 2026-11-03 | Phase 3 uses a compact three-by-three road grid with five named landmarks and three reserved portal candidate zones | Multiple routes remain available around buildings while portal implementation stays in its later phase |
+| 2026-11-03 | Phase 3 batches repeated static city meshes with instancing | Shared geometry and materials reduce draw calls without altering the approved asset set |
+| 2026-11-03 | Player is male and uses the approved Quaternius male superhero base through the MVP | Corrects the earlier female player assignment; final clothing and face remain part of character polish |
 
 ## Deferred decisions
 

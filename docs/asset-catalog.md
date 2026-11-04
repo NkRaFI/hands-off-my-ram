@@ -35,7 +35,7 @@ The voice generation vendor is an execution tool, not a creative asset choice. P
 
 ## Role assignments
 
-- Player: audited female superhero base with a distinct cool-color material.
+- Player: audited male superhero base with a distinct cool-color material.
 - Ram Sam: audited male superhero base with warm/dark clothing and `BRAND_RAMAI_ORIGINAL` when branding is introduced.
 - Rocket Elon: the audited male base with a separate hair/material/scale recipe, used primarily in the assistance panel.
 - NPCs: audited male/female bodies with four locked hairstyles; variation comes from materials, scale, hair, props, and coded archetypes.

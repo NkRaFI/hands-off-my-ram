@@ -1,10 +1,11 @@
 import { Suspense, useEffect, useMemo, useRef, type RefObject } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
-import { CapsuleCollider, CuboidCollider, Physics, RigidBody, useBeforePhysicsStep, type RapierRigidBody } from '@react-three/rapier'
+import { CapsuleCollider, Physics, RigidBody, useBeforePhysicsStep, useRapier, type RapierRigidBody } from '@react-three/rapier'
 import { AnimationMixer, Group, Vector3 } from 'three'
 import { assetManifest, assetUrl } from '../game/assets/asset-manifest'
-import { movementVelocity, TEST_AREA_HALF_SIZE, type Motion } from '../game/player/movement'
+import { movementVelocity, type Motion } from '../game/player/movement'
+import { CityColliders, CityLayout } from './city/CityLayout'
 
 const BODY_HEIGHT = 0.87
 const IDLE_CLIP = assetManifest['animation.idle'].clip
@@ -16,11 +17,12 @@ type PlayerSceneProps = {
   motion: Motion
   onMotionChange: (motion: Motion) => void
   onModelLoaded: () => void
+  onCityLoaded: () => void
   onPositionChange: (x: number, y: number, z: number) => void
 }
 
 function Character({ motion, paused, onLoaded }: { motion: Motion; paused: boolean; onLoaded: () => void }) {
-  const character = useGLTF(assetUrl('character.female'))
+  const character = useGLTF(assetUrl('character.male'))
   const library = useGLTF(assetUrl('animation.core'))
   const mixer = useMemo(() => new AnimationMixer(character.scene), [character.scene])
 
@@ -44,9 +46,12 @@ function Player({ pressed, paused, motion, onMotionChange, onModelLoaded, onPosi
   const body = useRef<RapierRigidBody>(null)
   const visual = useRef<Group>(null)
   const { camera } = useThree()
+  const { rapier, world } = useRapier()
   const cameraTarget = useRef(new Vector3(0, 1, 0))
   const cameraDestination = useRef(new Vector3())
   const lookDestination = useRef(new Vector3())
+  const cameraDirection = useRef(new Vector3())
+  const cameraRay = useRef(new rapier.Ray({ x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 1 }))
   const wantedMotion = useRef<Motion>('idle')
   const positionSync = useRef(0)
 
@@ -79,9 +84,16 @@ function Player({ pressed, paused, motion, onMotionChange, onModelLoaded, onPosi
       onPositionChange(position.x, position.y, position.z)
     }
     const smoothing = 1 - Math.exp(-8 * Math.min(delta, 0.1))
-    cameraDestination.current.set(position.x, position.y + 2.6, position.z + 5.5)
-    camera.position.lerp(cameraDestination.current, smoothing)
     lookDestination.current.set(position.x, position.y + 0.65, position.z)
+    cameraDestination.current.set(position.x, position.y + 2.6, position.z + 5.5)
+    cameraDirection.current.subVectors(cameraDestination.current, lookDestination.current)
+    const distance = cameraDirection.current.length()
+    cameraDirection.current.divideScalar(distance)
+    cameraRay.current.origin = lookDestination.current
+    cameraRay.current.dir = cameraDirection.current
+    const hit = world.castRay(cameraRay.current, distance, true, undefined, undefined, undefined, body.current ?? undefined)
+    if (hit) cameraDestination.current.copy(lookDestination.current).addScaledVector(cameraDirection.current, Math.max(1.1, hit.timeOfImpact - 0.35))
+    camera.position.lerp(cameraDestination.current, smoothing)
     cameraTarget.current.lerp(lookDestination.current, smoothing)
     camera.lookAt(cameraTarget.current)
 
@@ -105,46 +117,17 @@ function Player({ pressed, paused, motion, onMotionChange, onModelLoaded, onPosi
   )
 }
 
-function TestArea() {
-  const edge = TEST_AREA_HALF_SIZE
-  return (
-    <>
-      <RigidBody type="fixed" colliders={false}>
-        <CuboidCollider args={[20, 0.1, 20]} position={[0, -0.1, 0]} />
-        <CuboidCollider args={[0.5, 1.5, edge + 0.5]} position={[edge + 0.5, 1.5, 0]} />
-        <CuboidCollider args={[0.5, 1.5, edge + 0.5]} position={[-edge - 0.5, 1.5, 0]} />
-        <CuboidCollider args={[edge + 0.5, 1.5, 0.5]} position={[0, 1.5, edge + 0.5]} />
-        <CuboidCollider args={[edge + 0.5, 1.5, 0.5]} position={[0, 1.5, -edge - 0.5]} />
-      </RigidBody>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[40, 40]} />
-        <meshStandardMaterial color="#7cbf89" />
-      </mesh>
-      <gridHelper args={[20, 20, '#659b75', '#659b75']} position={[0, 0.015, 0]} />
-      {[edge, -edge].map((at) => (
-        <group key={at}>
-          <mesh position={[at, 0.025, 0]}>
-            <boxGeometry args={[0.08, 0.03, edge * 2]} />
-            <meshStandardMaterial color="#f4e8a0" />
-          </mesh>
-          <mesh position={[0, 0.025, at]}>
-            <boxGeometry args={[edge * 2, 0.03, 0.08]} />
-            <meshStandardMaterial color="#f4e8a0" />
-          </mesh>
-        </group>
-      ))}
-    </>
-  )
-}
-
 export function PlayerScene(props: PlayerSceneProps) {
   return (
     <>
       <color attach="background" args={['#a8d7ed']} />
-      <ambientLight intensity={1.4} />
-      <directionalLight position={[5, 9, 4]} intensity={2} />
+      <ambientLight intensity={1.35} />
+      <directionalLight position={[20, 45, 12]} intensity={2.1} />
       <Physics gravity={[0, -9.81, 0]} paused={props.paused}>
-        <TestArea />
+        <CityColliders />
+        <Suspense fallback={null}>
+          <CityLayout onLoaded={props.onCityLoaded} />
+        </Suspense>
         <Player {...props} />
       </Physics>
     </>

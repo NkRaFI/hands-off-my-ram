@@ -1,7 +1,6 @@
 export type Motion = 'idle' | 'run'
 
 export const PLAYER_SPEED = 4.5
-export const TEST_AREA_HALF_SIZE = 10
 
 export function movementVelocity(pressed: ReadonlySet<string>, speed = PLAYER_SPEED) {
   const x = Number(pressed.has('KeyD') || pressed.has('ArrowRight')) - Number(pressed.has('KeyA') || pressed.has('ArrowLeft'))

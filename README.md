@@ -6,11 +6,11 @@ An endless, browser-local, third-person 3D comedy chase game. Ram Sam arrives th
 
 ## Current status
 
-**Phase 2 player movement and camera implemented.** The test area now contains an approved placeholder character with idle and jog animations.
+**Phase 3 placeholder city implemented.** The approved Downtown City assets form a navigable street grid with five named landmarks, building collisions, clear chase routes, and reserved portal candidate zones. The approved male placeholder character has idle and jog animations.
 
 This repository includes specifications, acceptance criteria, visual references, a locked asset manifest, licence rules, and agent instructions. Phase 1 fetched and verified the approved set. Implement one phase at a time and do not begin the next phase until the current phase is tested and accepted.
 
-## Run the movement test
+## Explore the city
 
 Use Node 22.22.2 (see `.nvmrc`) and pnpm 10.33.2. From the repository root:
 
@@ -19,7 +19,7 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open the local URL printed by Vite, then select **Start movement test**. Use WASD or arrow keys to move and Escape or the on-screen button to pause and resume. The light border marks the collision boundary. The camera follows the player. Append `?inspect=1` to the URL to load and preview the locked runtime assets from Phase 1.
+Open the local URL printed by Vite, then select **Explore city**. Use WASD or arrow keys to move and Escape or the on-screen button to pause and resume. The camera follows the player and moves closer when a building blocks its view. Append `?inspect=1` to the URL to load and preview the locked runtime assets from Phase 1.
 
 ```sh
 pnpm typecheck

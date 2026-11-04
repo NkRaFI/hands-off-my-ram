@@ -29,6 +29,7 @@ export default function App() {
   const [started, setStarted] = useState(inspectionMode)
   const [ready, setReady] = useState(false)
   const [modelReady, setModelReady] = useState(false)
+  const [cityReady, setCityReady] = useState(false)
   const [paused, setPaused] = useState(false)
   const [motion, setMotion] = useState<Motion>('idle')
   const [position, setPosition] = useState<[number, number, number]>([0, 0.87, 0])
@@ -36,6 +37,7 @@ export default function App() {
   const [inspection, setInspection] = useState('')
   const [preview, setPreview] = useState<Group | null>(null)
   const onModelLoaded = useCallback(() => setModelReady(true), [])
+  const onCityLoaded = useCallback(() => setCityReady(true), [])
   const onPositionChange = useCallback((x: number, y: number, z: number) => setPosition([x, y, z]), [])
 
   useEffect(() => {
@@ -80,18 +82,18 @@ export default function App() {
     <main className="app">
       <header className="status">
         <h1>Hands Off My RAM!</h1>
-        <p>{inspectionMode ? 'Approved asset inspection' : 'Phase 2 movement test'}</p>
+        <p>{inspectionMode ? 'Approved asset inspection' : 'Phase 3 city preview'}</p>
       </header>
       {!started ? (
         <div className="overlay">
-          <p>Move the player around the test area.</p>
-          <button type="button" onClick={() => setStarted(true)}>Start movement test</button>
+          <p>Explore the placeholder chase map.</p>
+          <button type="button" onClick={() => setStarted(true)}>Explore city</button>
         </div>
       ) : (
         <SceneErrorBoundary>
-          {(!ready || (!inspectionMode && !modelReady)) && <p className="loading" role="status">Loading scene…</p>}
+          {(!ready || (!inspectionMode && (!modelReady || !cityReady))) && <p className="loading" role="status">Loading scene…</p>}
           <Canvas
-            aria-label={inspectionMode ? 'Approved asset inspection scene' : '3D player test area'}
+            aria-label={inspectionMode ? 'Approved asset inspection scene' : '3D placeholder city'}
             camera={{ position: [0, 3.5, 5.5], fov: 50 }}
             dpr={[1, 2]}
             onCreated={() => setReady(true)}
@@ -109,12 +111,12 @@ export default function App() {
                 {preview && <primitive object={preview} />}
               </>
             ) : (
-              <PlayerScene pressed={pressed} paused={paused} motion={motion} onMotionChange={setMotion} onModelLoaded={onModelLoaded} onPositionChange={onPositionChange} />
+              <PlayerScene pressed={pressed} paused={paused} motion={motion} onMotionChange={setMotion} onModelLoaded={onModelLoaded} onCityLoaded={onCityLoaded} onPositionChange={onPositionChange} />
             )}
           </Canvas>
           {!inspectionMode && (
             <aside className="controls">
-              <p>WASD or arrow keys to move · Esc to pause</p>
+              <p>WASD or arrow keys to explore · Esc to pause</p>
               <p>State: {paused ? 'Paused' : motion === 'run' ? 'Running' : 'Idle'}</p>
               <p data-testid="player-position">Position: {position.map((value) => value.toFixed(1)).join(', ')}</p>
               <button type="button" onClick={() => { pressed.current.clear(); setPaused((value) => !value) }}>
