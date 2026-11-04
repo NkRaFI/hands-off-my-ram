@@ -7,7 +7,7 @@ Make the first complete playable interaction: catch Ram Sam, attack, and recover
 ## Included
 
 - `PROP_POLYPIZZA_BAT`
-- Attack input using a selected clip from `ANIM_QUATERNIUS_ACTION`
+- Attack input using the audited embedded `CharacterArmature|Sword_Slash` clip from `character.player`
 - Generous hit detection/assistance
 - Ram Sam hit reactions and variable vulnerability window
 - `PROP_POLYPIZZA_RAM` drops, collection, score, portal escape/reappearance test cycle

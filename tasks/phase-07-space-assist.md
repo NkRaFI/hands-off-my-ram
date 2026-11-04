@@ -8,14 +8,14 @@ Add frequent, player-earned portal assistance that helps close long chase distan
 
 - Assist meter and documented charge events
 - First-use tutorial/early scripted availability
-- Fictional Rocket Elon communication panel
+- Fictional Rocket Elon communication panel using `character.rocket` from `CHAR_QUATERNIUS_MODULAR_MEN`
 - `PROP_POLYPIZZA_ROCKET`, `FX_PORTAL_ORIGINAL`, and the initial `BRAND_RAMAI_ORIGINAL`
 - Safe teleport near Ram Sam
 - Short landing movement boost and anti-instant-escape grace period
 
 ## Excluded
 
-- Final character, rocket model, voice, or branded animation
+- Final face, voice, or branded animation
 - Multiplayer or online services
 
 ## Acceptance criteria

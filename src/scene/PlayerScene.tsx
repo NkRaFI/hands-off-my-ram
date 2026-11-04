@@ -1,15 +1,17 @@
-import { Suspense, useEffect, useMemo, useRef, type RefObject } from 'react'
+import { Suspense, useEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import { CapsuleCollider, Physics, RigidBody, useBeforePhysicsStep, useRapier, type RapierRigidBody } from '@react-three/rapier'
-import { AnimationMixer, Group, Vector3 } from 'three'
-import { assetManifest, assetUrl } from '../game/assets/asset-manifest'
+import { AnimationMixer, Box3, Group, Vector3 } from 'three'
+import { assetUrl } from '../game/assets/asset-manifest'
 import { movementVelocity, type Motion } from '../game/player/movement'
+import { advanceEncounter, initialEncounter, PORTAL_SECONDS, SAM_START, type EncounterPhase } from '../game/ram-sam/encounter'
 import { CityColliders, CityLayout } from './city/CityLayout'
 
 const BODY_HEIGHT = 0.87
-const IDLE_CLIP = assetManifest['animation.idle'].clip
-const RUN_CLIP = assetManifest['animation.jog'].clip
+const IDLE_CLIP = 'CharacterArmature|Idle'
+const RUN_CLIP = 'CharacterArmature|Run'
+const INTERACT_CLIP = 'CharacterArmature|Interact'
 
 type PlayerSceneProps = {
   pressed: RefObject<Set<string>>
@@ -18,31 +20,118 @@ type PlayerSceneProps = {
   onMotionChange: (motion: Motion) => void
   onModelLoaded: () => void
   onCityLoaded: () => void
+  onSamLoaded: () => void
   onPositionChange: (x: number, y: number, z: number) => void
+  encounterPhase: EncounterPhase
+  onEncounterPhaseChange: (phase: EncounterPhase) => void
+  onSamPositionChange: (x: number, z: number) => void
+  sceneReady: boolean
 }
 
-function Character({ motion, paused, onLoaded }: { motion: Motion; paused: boolean; onLoaded: () => void }) {
-  const character = useGLTF(assetUrl('character.male'))
-  const library = useGLTF(assetUrl('animation.core'))
+function Character({ id, motion, paused, carryingRam, onLoaded }: { id: 'character.player' | 'character.sam'; motion: Motion | 'interact'; paused: boolean; carryingRam: boolean; onLoaded?: () => void }) {
+  const character = useGLTF(assetUrl(id))
   const mixer = useMemo(() => new AnimationMixer(character.scene), [character.scene])
 
-  useEffect(() => onLoaded(), [onLoaded])
+  useEffect(() => { onLoaded?.() }, [onLoaded])
 
   useEffect(() => {
-    const name = motion === 'run' ? RUN_CLIP : IDLE_CLIP
-    const clip = library.animations.find((item) => item.name === name)
+    const name = motion === 'run' ? RUN_CLIP : motion === 'interact' ? INTERACT_CLIP : IDLE_CLIP
+    const clip = character.animations.find((item) => item.name === name)
     if (!clip) throw new Error(`Missing approved animation clip: ${name}`)
     const action = mixer.clipAction(clip)
     action.reset().fadeIn(0.18).play()
     return () => { action.fadeOut(0.18) }
-  }, [library.animations, mixer, motion])
+  }, [character.animations, mixer, motion])
 
   useFrame((_, delta) => { if (!paused) mixer.update(Math.min(delta, 0.1)) })
 
-  return <primitive object={character.scene} />
+  return <><primitive object={character.scene} />{carryingRam && <RamProp />}</>
 }
 
-function Player({ pressed, paused, motion, onMotionChange, onModelLoaded, onPositionChange }: PlayerSceneProps) {
+function RamProp() {
+  const model = useGLTF(assetUrl('prop.ram'))
+  const scene = useMemo(() => {
+    const scene = model.scene.clone(true)
+    const bounds = new Box3().setFromObject(scene)
+    const size = bounds.getSize(new Vector3())
+    const center = bounds.getCenter(new Vector3())
+    const scale = 0.34 / Math.max(size.x, size.y, size.z, 0.001)
+    scene.scale.setScalar(scale)
+    scene.position.copy(center).multiplyScalar(-scale)
+    return scene
+  }, [model.scene])
+  return <group position={[0.35, 1.2, 0.05]} rotation={[0.2, 0, -0.3]}><primitive object={scene} /></group>
+}
+
+function Portal({ elapsed, paused }: { elapsed: number; paused: boolean }) {
+  const ring = useRef<Group>(null)
+  useFrame((_, delta) => {
+    if (!ring.current || paused) return
+    ring.current.rotation.z += delta * 1.8
+    ring.current.scale.setScalar(Math.min(1, 0.15 + elapsed / PORTAL_SECONDS))
+  })
+  return (
+    <group ref={ring} position={[SAM_START.x, 1.45, SAM_START.z]}>
+      <mesh>
+        <torusGeometry args={[1.35, 0.16, 10, 32]} />
+        <meshStandardMaterial color="#a75cff" emissive="#7b22f8" emissiveIntensity={2.4} />
+      </mesh>
+      <mesh rotation={[0, 0, 0.4]}>
+        <torusGeometry args={[1.06, 0.08, 8, 28]} />
+        <meshStandardMaterial color="#61eaff" emissive="#27bafa" emissiveIntensity={2} />
+      </mesh>
+      <mesh>
+        <circleGeometry args={[0.98, 32]} />
+        <meshBasicMaterial color="#7336c9" transparent opacity={0.67} depthWrite={false} side={2} />
+      </mesh>
+    </group>
+  )
+}
+
+function RamSam({ paused, sceneReady, onLoaded, onPhaseChange, onPositionChange }: { paused: boolean; sceneReady: boolean; onLoaded: () => void; onPhaseChange: (phase: EncounterPhase) => void; onPositionChange: (x: number, z: number) => void }) {
+  const state = useRef(initialEncounter())
+  const actor = useRef<Group>(null)
+  const [phase, setPhase] = useState<EncounterPhase>('portal')
+  const [portalElapsed, setPortalElapsed] = useState(0)
+  const sync = useRef(0)
+
+  useFrame((_, delta) => {
+    if (paused || !sceneReady) return
+    const previous = state.current
+    const next = advanceEncounter(previous, Math.min(delta, 0.1))
+    state.current = next
+    if (next.phase !== previous.phase) {
+      setPhase(next.phase)
+      onPhaseChange(next.phase)
+      if (previous.phase === 'portal') setPortalElapsed(PORTAL_SECONDS)
+    }
+    if (next.phase === 'portal' && Math.abs(next.elapsed - portalElapsed) > 0.08) setPortalElapsed(next.elapsed)
+    if (actor.current) {
+      actor.current.position.set(next.x, 0, next.z)
+      const dx = next.x - previous.x
+      const dz = next.z - previous.z
+      if (Math.hypot(dx, dz) > 0.001) actor.current.rotation.y = Math.atan2(dx, dz)
+    }
+    sync.current += delta
+    if (sync.current >= 0.1) {
+      sync.current = 0
+      onPositionChange(next.x, next.z)
+    }
+  })
+
+  return (
+    <>
+      {phase !== 'chase' && <Portal elapsed={portalElapsed} paused={paused} />}
+      <group ref={actor} position={[SAM_START.x, 0, SAM_START.z]}>
+        <Suspense fallback={null}>
+          <Character id="character.sam" motion={phase === 'portal' ? 'idle' : phase === 'steal' ? 'interact' : 'run'} paused={paused} carryingRam={phase === 'chase'} onLoaded={onLoaded} />
+        </Suspense>
+      </group>
+    </>
+  )
+}
+
+function Player({ pressed, paused, motion, onMotionChange, onModelLoaded, onPositionChange, encounterPhase }: PlayerSceneProps) {
   const body = useRef<RapierRigidBody>(null)
   const visual = useRef<Group>(null)
   const { camera } = useThree()
@@ -110,7 +199,7 @@ function Player({ pressed, paused, motion, onMotionChange, onModelLoaded, onPosi
       <CapsuleCollider args={[0.55, 0.32]} />
       <group ref={visual} position={[0, -BODY_HEIGHT, 0]} rotation={[0, Math.PI, 0]}>
         <Suspense fallback={null}>
-          <Character motion={motion} paused={paused} onLoaded={onModelLoaded} />
+          <Character id="character.player" motion={motion} paused={paused} carryingRam={encounterPhase !== 'chase'} onLoaded={onModelLoaded} />
         </Suspense>
       </group>
     </RigidBody>
@@ -123,12 +212,13 @@ export function PlayerScene(props: PlayerSceneProps) {
       <color attach="background" args={['#a8d7ed']} />
       <ambientLight intensity={1.35} />
       <directionalLight position={[20, 45, 12]} intensity={2.1} />
-      <Physics gravity={[0, -9.81, 0]} paused={props.paused}>
+      <Physics gravity={[0, -9.81, 0]} paused={props.paused || props.encounterPhase !== 'chase'}>
         <CityColliders />
         <Suspense fallback={null}>
           <CityLayout onLoaded={props.onCityLoaded} />
         </Suspense>
-        <Player {...props} />
+        <Player {...props} paused={props.paused || props.encounterPhase !== 'chase'} />
+        <RamSam paused={props.paused} sceneReady={props.sceneReady} onLoaded={props.onSamLoaded} onPhaseChange={props.onEncounterPhaseChange} onPositionChange={props.onSamPositionChange} />
       </Physics>
     </>
   )

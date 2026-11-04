@@ -6,11 +6,11 @@ An endless, browser-local, third-person 3D comedy chase game. Ram Sam arrives th
 
 ## Current status
 
-**Phase 3 placeholder city implemented.** The approved Downtown City assets form a navigable street grid with five named landmarks, building collisions, clear chase routes, and reserved portal candidate zones. The approved male placeholder character has idle and jog animations.
+**Phase 4 opening chase implemented.** A clothed male player starts with RAM, Ram Sam emerges through a portal, steals it, and runs along the approved city's road network. The player can pursue him using the direction cue. Bat combat and RAM recovery remain Phase 5 work.
 
 This repository includes specifications, acceptance criteria, visual references, a locked asset manifest, licence rules, and agent instructions. Phase 1 fetched and verified the approved set. Implement one phase at a time and do not begin the next phase until the current phase is tested and accepted.
 
-## Explore the city
+## Play the opening chase
 
 Use Node 22.22.2 (see `.nvmrc`) and pnpm 10.33.2. From the repository root:
 
@@ -19,7 +19,7 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open the local URL printed by Vite, then select **Explore city**. Use WASD or arrow keys to move and Escape or the on-screen button to pause and resume. The camera follows the player and moves closer when a building blocks its view. Append `?inspect=1` to the URL to load and preview the locked runtime assets from Phase 1.
+Open the local URL printed by Vite, then select **Start chase**. Ram Sam steals the RAM after the opening portal sequence. Use WASD or arrow keys to pursue him and Escape or the on-screen button to pause and resume. The camera follows the player and moves closer when a building blocks its view. Append `?inspect=1` to the URL to load and preview the approved runtime assets.
 
 ```sh
 pnpm typecheck

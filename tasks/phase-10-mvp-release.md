@@ -16,7 +16,7 @@ Finish a stable, deployable browser-local game using cohesive open assets.
 
 ## Excluded
 
-- Final custom faces and clothing
+- Final custom faces, emblems, and clothing refinements
 - Blender-dependent modifications
 - Multiplayer, backend, accounts, global leaderboard
 

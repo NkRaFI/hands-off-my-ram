@@ -15,7 +15,7 @@ This audit downloaded and inspected the free approved archives before implementa
 
 ## Corrections made by the audit
 
-1. The free `Universal Base Characters[Standard].zip` contains only `Superhero_Male_FullBody` and `Superhero_Female_FullBody`, not every body shown on the product page. The MVP therefore uses those two verified bodies with hair, material, scale, and color variations. Paid/source-only bodies are not assumed.
+1. The free `Universal Base Characters[Standard].zip` contains only `Superhero_Male_FullBody` and `Superhero_Female_FullBody`, not every body shown on the product page. The original MVP plan used those bodies; the 2026-11-04 Ultimate Modular Men decision supersedes that active character assignment. Paid/source-only bodies are not assumed.
 2. `Downtown City MegaKit[Standard]` already contains the exact streets and sidewalks required by the MVP. The separate Modular Streets dependency was removed.
 3. Kenney Digital Audio did not produce a reliable audit download and is no longer required. Portal/space layers use verified `glitch_*`, `maximize_*`, and other files from Kenney Interface Sounds plus code-generated synthesis.
 4. Exact internal animation, music, SFX, UI, model, and city filenames are now locked in `runtime-asset-manifest.csv`.
@@ -53,3 +53,13 @@ Phase 1 must enforce these budgets after conversion:
 - Total production static assets for the MVP: 70 MiB compressed or less.
 
 If conversion cannot meet a budget without unacceptable visible loss, Codex must report the exact files and measurements. It may not silently change the source asset.
+
+## 2026-11-04 character-pack amendment
+
+The user selected Quaternius Ultimate Modular Men for finished clothed characters. The creator's official Google Drive folder listed the individual glTF models but returned a quota-exceeded response for downloads. The creator's [Poly Pizza bundle](https://poly.pizza/bundle/Ultimate-Modular-Men-Pack-ZiH8muWqwQ) was downloaded instead, after recording its source and CC0 licence in the registry.
+
+- Archive: `Ultimate Modular Men Pack-glb.zip`, 4,266,694 bytes, SHA-256 `ca022bede1c3453872887df75b1b5e6776ccad2760e105610885232d810d5224`.
+- Contents: 11 GLBs, each with 24 embedded animation clips and no external texture files.
+- Selected runtime models: Casual Character, Hoodie Character, Astronaut, Worker, Business Man, Punk, and Swat. The first three serve the player, Ram Sam, and Rocket Elon; the latter four are reserved NPC variants.
+- Verified embedded clips include `CharacterArmature|Idle`, `CharacterArmature|Walk`, `CharacterArmature|Run`, `CharacterArmature|Interact`, `CharacterArmature|HitRecieve`, and `CharacterArmature|Sword_Slash` in every selected model. The spelling `HitRecieve` is the source clip name.
+- The seven selected GLBs were copied unchanged. Individual runtime checksums are in `runtime-asset-checksums.csv`.

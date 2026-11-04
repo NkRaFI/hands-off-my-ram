@@ -1,6 +1,13 @@
 // Generated from docs/runtime-asset-manifest.csv during Phase 1.
 // Paths are stable runtime IDs; source and licence details are in docs/asset-registry.csv.
 export const assetManifest = {
+  "character.player": {"url":"/assets/models/character-player.glb","sourceId":"CHAR_QUATERNIUS_MODULAR_MEN"},
+  "character.sam": {"url":"/assets/models/character-sam.glb","sourceId":"CHAR_QUATERNIUS_MODULAR_MEN"},
+  "character.rocket": {"url":"/assets/models/character-rocket.glb","sourceId":"CHAR_QUATERNIUS_MODULAR_MEN"},
+  "character.npc.worker": {"url":"/assets/models/character-npc-worker.glb","sourceId":"CHAR_QUATERNIUS_MODULAR_MEN"},
+  "character.npc.business": {"url":"/assets/models/character-npc-business.glb","sourceId":"CHAR_QUATERNIUS_MODULAR_MEN"},
+  "character.npc.punk": {"url":"/assets/models/character-npc-punk.glb","sourceId":"CHAR_QUATERNIUS_MODULAR_MEN"},
+  "character.npc.swat": {"url":"/assets/models/character-npc-swat.glb","sourceId":"CHAR_QUATERNIUS_MODULAR_MEN"},
   "character.male": {"url":"/assets/models/character-male.glb","sourceId":"CHAR_QUATERNIUS_BASE"},
   "character.female": {"url":"/assets/models/character-female.glb","sourceId":"CHAR_QUATERNIUS_BASE"},
   "character.hair.buzzed": {"url":"/assets/models/character-hair-buzzed.glb","sourceId":"CHAR_QUATERNIUS_BASE"},

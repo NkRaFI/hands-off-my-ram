@@ -17,3 +17,9 @@ Measured from the Phase 1 production build with per-file gzip level 9. Actual tr
 | Largest individual production file | 8,091,444 B | 24 MiB |
 
 The complete current build is below the 30 MiB first playable and 35 MiB deferred payload limits even if all files were fetched together. Later gameplay phases must remeasure their actual loading groups. Source archives are not deployed.
+
+## 2026-11-04 character amendment
+
+The approved Quaternius Ultimate Modular Men bundle was ingested from the creator's Poly Pizza listing after the official Google Drive folder returned a quota-exceeded response. Seven selected GLBs were copied unchanged for the three named characters and four future male NPC variants. The source ZIP remains outside the repository; its SHA-256 and CC0 evidence are recorded under `docs/licenses/CHAR_QUATERNIUS_MODULAR_MEN/`.
+
+The runtime set now contains 66 manifest IDs and 92 production asset files totaling 43,537,496 bytes before transfer compression. The new character files range from 1,344,928 to 1,944,976 bytes each. The Phase 4 production build contains 96 files totaling 47,092,384 bytes raw and 18,174,652 bytes when each file is compressed with gzip level 9. The previously ingested base characters and animation libraries remain as historical files; active characters use their embedded clips. The final payload must be remeasured when Phase 10 prepares deployment.

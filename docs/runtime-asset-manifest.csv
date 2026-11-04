@@ -1,22 +1,29 @@
 runtime_id,source_id,exact_source_file,source_bytes,phase,purpose,conversion_rule
-character.male,CHAR_QUATERNIUS_BASE,Base Characters/Godot - UE/Superhero_Male_FullBody.gltf + .bin,751065,2,Player Ram Sam Rocket Elon and male NPC base,Pack as GLB and resize/convert referenced textures
-character.female,CHAR_QUATERNIUS_BASE,Base Characters/Godot - UE/Superhero_Female_FullBody.gltf + .bin,1022464,2,Female NPC base,Pack as GLB and resize/convert referenced textures
-character.hair.buzzed,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_Buzzed.gltf + .bin,56480,2,Short hair variant,Pack as GLB and reuse shared hair texture
-character.hair.buzzed-female,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_BuzzedFemale.gltf + .bin,57151,2,Short female hair variant,Pack as GLB and reuse shared hair texture
-character.hair.long,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_Long.gltf + .bin,205569,2,Long hair NPC variant,Pack as GLB and reuse shared hair texture
-character.hair.buns,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_Buns.gltf + .bin,229723,2,Buns NPC variant,Pack as GLB and reuse shared hair texture
-animation.core,ANIM_QUATERNIUS_CORE,Unreal-Godot/UAL1_Standard.glb,7618436,2,Core animation container,Retain only named clips where tooling safely supports pruning
-animation.idle,ANIM_QUATERNIUS_CORE,clip: Idle_Loop,,2,Default idle,Reference clip from animation.core
-animation.talk,ANIM_QUATERNIUS_CORE,clip: Idle_Talking_Loop,,6,Dialogue gesture,Reference clip from animation.core
-animation.walk,ANIM_QUATERNIUS_CORE,clip: Walk_Loop,,2,Walking,Reference clip from animation.core
-animation.jog,ANIM_QUATERNIUS_CORE,clip: Jog_Fwd_Loop,,2,Running,Reference clip from animation.core
-animation.sprint,ANIM_QUATERNIUS_CORE,clip: Sprint_Loop,,4,Fast chase,Reference clip from animation.core
-animation.hit-chest,ANIM_QUATERNIUS_CORE,clip: Hit_Chest,,5,Cartoon hit reaction,Reference clip from animation.core
-animation.hit-head,ANIM_QUATERNIUS_CORE,clip: Hit_Head,,5,Alternate cartoon hit reaction,Reference clip from animation.core
-animation.bat-swing,ANIM_QUATERNIUS_CORE,clip: Sword_Attack,,5,Bat attack retargeted from sword swing,Reference clip from animation.core
-animation.action,ANIM_QUATERNIUS_ACTION,Unreal-Godot/UAL2_Standard.glb,8091444,7,Supplemental assistance/action container,Defer load until needed
-animation.knockback,ANIM_QUATERNIUS_ACTION,clip: Hit_Knockback,,5,Strong cartoon reaction,Reference clip from animation.action
-animation.rocket-idle,ANIM_QUATERNIUS_ACTION,clip: Idle_FoldArms_Loop,,7,Rocket Elon panel pose,Reference clip from animation.action
+character.player,CHAR_QUATERNIUS_MODULAR_MEN,Casual Character.glb,1430660,2,Clothed male player,Copy approved GLB unchanged; use embedded clips
+character.sam,CHAR_QUATERNIUS_MODULAR_MEN,Hoodie Character.glb,1456760,4,Ram Sam hoodie and embedded clips,Copy approved GLB unchanged; use embedded clips
+character.rocket,CHAR_QUATERNIUS_MODULAR_MEN,Astronaut.glb,1944976,7,Rocket Elon space-themed character,Copy approved GLB unchanged; use embedded clips
+character.npc.worker,CHAR_QUATERNIUS_MODULAR_MEN,Worker.glb,1344928,6,Worker NPC,Copy approved GLB unchanged; use embedded clips
+character.npc.business,CHAR_QUATERNIUS_MODULAR_MEN,Business Man.glb,1529248,6,Business NPC,Copy approved GLB unchanged; use embedded clips
+character.npc.punk,CHAR_QUATERNIUS_MODULAR_MEN,Punk.glb,1374172,6,Punk NPC,Copy approved GLB unchanged; use embedded clips
+character.npc.swat,CHAR_QUATERNIUS_MODULAR_MEN,Swat.glb,1560900,6,Security NPC,Copy approved GLB unchanged; use embedded clips
+character.male,CHAR_QUATERNIUS_BASE,Base Characters/Godot - UE/Superhero_Male_FullBody.gltf + .bin,751065,2,Retained legacy character or hairstyle from original Phase 1 intake,Pack as GLB and resize/convert referenced textures
+character.female,CHAR_QUATERNIUS_BASE,Base Characters/Godot - UE/Superhero_Female_FullBody.gltf + .bin,1022464,2,Retained legacy character or hairstyle from original Phase 1 intake,Pack as GLB and resize/convert referenced textures
+character.hair.buzzed,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_Buzzed.gltf + .bin,56480,2,Retained legacy character or hairstyle from original Phase 1 intake,Pack as GLB and reuse shared hair texture
+character.hair.buzzed-female,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_BuzzedFemale.gltf + .bin,57151,2,Retained legacy character or hairstyle from original Phase 1 intake,Pack as GLB and reuse shared hair texture
+character.hair.long,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_Long.gltf + .bin,205569,2,Retained legacy character or hairstyle from original Phase 1 intake,Pack as GLB and reuse shared hair texture
+character.hair.buns,CHAR_QUATERNIUS_BASE,Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_Buns.gltf + .bin,229723,2,Retained legacy character or hairstyle from original Phase 1 intake,Pack as GLB and reuse shared hair texture
+animation.core,ANIM_QUATERNIUS_CORE,Unreal-Godot/UAL1_Standard.glb,7618436,2,Retained legacy animation container or clip from original Phase 1 intake,Retain only named clips where tooling safely supports pruning
+animation.idle,ANIM_QUATERNIUS_CORE,clip: Idle_Loop,,2,Retained legacy animation container or clip from original Phase 1 intake,Reference clip from animation.core
+animation.talk,ANIM_QUATERNIUS_CORE,clip: Idle_Talking_Loop,,6,Retained legacy animation container or clip from original Phase 1 intake,Reference clip from animation.core
+animation.walk,ANIM_QUATERNIUS_CORE,clip: Walk_Loop,,2,Retained legacy animation container or clip from original Phase 1 intake,Reference clip from animation.core
+animation.jog,ANIM_QUATERNIUS_CORE,clip: Jog_Fwd_Loop,,2,Retained legacy animation container or clip from original Phase 1 intake,Reference clip from animation.core
+animation.sprint,ANIM_QUATERNIUS_CORE,clip: Sprint_Loop,,4,Retained legacy animation container or clip from original Phase 1 intake,Reference clip from animation.core
+animation.hit-chest,ANIM_QUATERNIUS_CORE,clip: Hit_Chest,,5,Retained legacy animation container or clip from original Phase 1 intake,Reference clip from animation.core
+animation.hit-head,ANIM_QUATERNIUS_CORE,clip: Hit_Head,,5,Retained legacy animation container or clip from original Phase 1 intake,Reference clip from animation.core
+animation.bat-swing,ANIM_QUATERNIUS_CORE,clip: Sword_Attack,,5,Retained legacy animation container or clip from original Phase 1 intake,Reference clip from animation.core
+animation.action,ANIM_QUATERNIUS_ACTION,Unreal-Godot/UAL2_Standard.glb,8091444,7,Retained legacy animation container or clip from original Phase 1 intake,Defer load until needed
+animation.knockback,ANIM_QUATERNIUS_ACTION,clip: Hit_Knockback,,5,Retained legacy animation container or clip from original Phase 1 intake,Reference clip from animation.action
+animation.rocket-idle,ANIM_QUATERNIUS_ACTION,clip: Idle_FoldArms_Loop,,7,Retained legacy animation container or clip from original Phase 1 intake,Reference clip from animation.action
 city.building.large,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Building_Large_2.gltf + .bin,3368108,3,Large city building,Pack as GLB and share converted texture set
 city.building.medium,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Building_Medium_2_001.gltf + .bin,2468532,3,Medium city building,Pack as GLB and share converted texture set
 city.building.small,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Building_Small_1.gltf + .bin,1583535,3,Small city building,Pack as GLB and share converted texture set

@@ -7,10 +7,11 @@ Open these source pages to inspect the exact approved assets before Phase 1. The
 | Stable ID | What to inspect | Preview/source |
 |---|---|---|
 | `CHAR_QUATERNIUS_BASE` | Body styles, hairstyles, clothing separation, low-poly proportions, humanoid rig | [Universal Base Characters — Quaternius](https://quaternius.com/packs/universalbasecharacters.html) |
-| `ANIM_QUATERNIUS_CORE` | Idle, walk, run, sprint, reactions, and gestures | [Universal Animation Library — Quaternius](https://quaternius.com/packs/universalanimationlibrary.html) |
-| `ANIM_QUATERNIUS_ACTION` | Melee/action clips suitable for the cartoon bat swing | [Universal Animation Library 2 — Quaternius](https://quaternius.com/packs/universalanimationlibrary2.html) |
+| `CHAR_QUATERNIUS_MODULAR_MEN` | Finished casual, hoodie, astronaut, and urban NPC models with embedded clips | [Ultimate Modular Men — Quaternius on Poly Pizza](https://poly.pizza/bundle/Ultimate-Modular-Men-Pack-ZiH8muWqwQ) |
+| `ANIM_QUATERNIUS_CORE` | Retained legacy animation source from the original intake | [Universal Animation Library — Quaternius](https://quaternius.com/packs/universalanimationlibrary.html) |
+| `ANIM_QUATERNIUS_ACTION` | Retained legacy animation source from the original intake | [Universal Animation Library 2 — Quaternius](https://quaternius.com/packs/universalanimationlibrary2.html) |
 
-The player, Ram Sam, Rocket Elon, and NPCs initially use different combinations and recolors from the same character system. This gives the game a cohesive look before custom faces and clothing are created in later polishing.
+The player, Ram Sam, Rocket Elon, and male NPCs use finished clothed models from the same pack. Final original emblems, faces, and clothing refinements remain later polishing work.
 
 ## City environment
 

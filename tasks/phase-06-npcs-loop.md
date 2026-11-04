@@ -6,7 +6,7 @@ Implement the complete endless theft/chase/recovery loop with coded NPCs.
 
 ## Included
 
-- NPC archetypes built only from `CHAR_QUATERNIUS_BASE` variants
+- Male NPC archetypes built from the four audited `CHAR_QUATERNIUS_MODULAR_MEN` NPC models
 - Wander, alarm, flee, robbed, safe, react states
 - Ram Sam target selection and theft
 - Subtitled placeholder punchlines

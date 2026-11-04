@@ -6,7 +6,8 @@ Implement the opening encounter and a reliable basic chase target.
 
 ## Included
 
-- Ram Sam variant from `CHAR_QUATERNIUS_BASE` with `ANIM_QUATERNIUS_CORE`
+- Clothed Ram Sam from `CHAR_QUATERNIUS_MODULAR_MEN` (`character.sam`) with its embedded idle/run/interact clips
+- Replace the visible Phase 2 base player with `character.player` from the same audited pack
 - `FX_PORTAL_ORIGINAL` entrance portal effect
 - `PROP_POLYPIZZA_RAM` player prop and theft event
 - Basic Ram Sam running/navigation
@@ -26,3 +27,12 @@ Implement the opening encounter and a reliable basic chase target.
 - Ram Sam steals the RAM and enters a reachable chase state.
 - State transitions cannot leave Ram Sam missing or immobile.
 - The player always has a readable direction cue.
+- The player and Ram Sam use the verified clothed models; the RAM prop changes carrier at theft.
+
+## Manual test
+
+1. Start the chase and confirm the clothed male player carries the RAM while Ram Sam appears through the portal.
+2. Confirm Ram Sam approaches, steals the RAM, and begins running while the player gains movement control.
+3. Follow Ram Sam around several city roads. Confirm he remains visible and does not cross building footprints.
+4. Confirm the direction cue points toward Ram Sam as the player turns and moves.
+5. Pause and resume during the chase, resize to a narrow viewport, and check the browser console for errors.

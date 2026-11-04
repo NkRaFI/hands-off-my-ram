@@ -6,9 +6,10 @@ Asset discovery is complete for the gameplay MVP. This is an approved manifest, 
 
 | Stable ID | Approved source | Exact role | Licence |
 |---|---|---|---|
-| `CHAR_QUATERNIUS_BASE` | [Quaternius Universal Base Characters](https://quaternius.com/packs/universalbasecharacters.html) | Player, Ram Sam, Rocket Elon panel character, and all NPC bases | CC0 |
-| `ANIM_QUATERNIUS_CORE` | [Quaternius Universal Animation Library](https://quaternius.com/packs/universalanimationlibrary.html) | Idle, walk, run, sprint, reactions, gestures | CC0 |
-| `ANIM_QUATERNIUS_ACTION` | [Quaternius Universal Animation Library 2](https://quaternius.com/packs/universalanimationlibrary2.html) | Bat swing/action animation and supplemental movement | CC0 |
+| `CHAR_QUATERNIUS_BASE` | [Quaternius Universal Base Characters](https://quaternius.com/packs/universalbasecharacters.html) | Retained Phase 1 legacy runtime files; no longer assigned to active characters | CC0 |
+| `CHAR_QUATERNIUS_MODULAR_MEN` | [Quaternius Ultimate Modular Men via Poly Pizza](https://poly.pizza/bundle/Ultimate-Modular-Men-Pack-ZiH8muWqwQ) | Clothed male player, Ram Sam, Rocket Elon, and four male NPC variants | CC0 |
+| `ANIM_QUATERNIUS_CORE` | [Quaternius Universal Animation Library](https://quaternius.com/packs/universalanimationlibrary.html) | Retained Phase 1 legacy runtime clips; active characters use embedded clips | CC0 |
+| `ANIM_QUATERNIUS_ACTION` | [Quaternius Universal Animation Library 2](https://quaternius.com/packs/universalanimationlibrary2.html) | Retained Phase 1 legacy runtime clips; active characters use embedded clips | CC0 |
 | `ENV_QUATERNIUS_DOWNTOWN` | [Quaternius Downtown City MegaKit](https://quaternius.com/packs/downtowncitymegakit.html) | Buildings, urban props, and primary city kit | CC0 |
 | `PROP_POLYPIZZA_BAT` | [Baseball Bat by CreativeTrio](https://poly.pizza/m/i2JCd3w8gh) | Player weapon | CC0 |
 | `PROP_POLYPIZZA_RAM` | [RAM by iPoly3D](https://poly.pizza/m/obBMPOGYvy) | Stolen, carried, dropped, and collected RAM stick | CC0 |
@@ -35,10 +36,10 @@ The voice generation vendor is an execution tool, not a creative asset choice. P
 
 ## Role assignments
 
-- Player: audited male superhero base with a distinct cool-color material.
-- Ram Sam: audited male superhero base with warm/dark clothing and `BRAND_RAMAI_ORIGINAL` when branding is introduced.
-- Rocket Elon: the audited male base with a separate hair/material/scale recipe, used primarily in the assistance panel.
-- NPCs: audited male/female bodies with four locked hairstyles; variation comes from materials, scale, hair, props, and coded archetypes.
+- Player: `character.player`, the pack's clothed Casual Character.
+- Ram Sam: `character.sam`, the pack's Hoodie Character; add `BRAND_RAMAI_ORIGINAL` when branding is introduced.
+- Rocket Elon: `character.rocket`, the pack's Astronaut, used primarily in the assistance panel.
+- Male NPCs: `character.npc.worker`, `character.npc.business`, `character.npc.punk`, and `character.npc.swat`. Female NPCs require a later explicit compatible asset decision; the old female superhero base remains a legacy file, not an active NPC assignment.
 - No phase may replace these with Mixamo, KayKit, another Poly Pizza model, or an AI-generated model without an explicit decision-log amendment approved by the user.
 
 ## Phase 1 intake rules

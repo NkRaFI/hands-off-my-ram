@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import type { Group } from 'three'
 import { PlayerScene } from './scene/PlayerScene'
 import type { Motion } from './game/player/movement'
+import { SAM_START, type EncounterPhase } from './game/ram-sam/encounter'
 
 const MOVEMENT_KEYS = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight'])
 
@@ -30,15 +31,22 @@ export default function App() {
   const [ready, setReady] = useState(false)
   const [modelReady, setModelReady] = useState(false)
   const [cityReady, setCityReady] = useState(false)
+  const [samReady, setSamReady] = useState(false)
   const [paused, setPaused] = useState(false)
   const [motion, setMotion] = useState<Motion>('idle')
   const [position, setPosition] = useState<[number, number, number]>([0, 0.87, 0])
+  const [encounterPhase, setEncounterPhase] = useState<EncounterPhase>('portal')
+  const [samPosition, setSamPosition] = useState<[number, number]>([SAM_START.x, SAM_START.z])
   const pressed = useRef(new Set<string>())
   const [inspection, setInspection] = useState('')
   const [preview, setPreview] = useState<Group | null>(null)
   const onModelLoaded = useCallback(() => setModelReady(true), [])
   const onCityLoaded = useCallback(() => setCityReady(true), [])
+  const onSamLoaded = useCallback(() => setSamReady(true), [])
   const onPositionChange = useCallback((x: number, y: number, z: number) => setPosition([x, y, z]), [])
+  const onSamPositionChange = useCallback((x: number, z: number) => setSamPosition([x, z]), [])
+  const direction = Math.atan2(samPosition[0] - position[0], position[2] - samPosition[1]) * 180 / Math.PI
+  const distance = Math.hypot(samPosition[0] - position[0], samPosition[1] - position[2])
 
   useEffect(() => {
     if (!started || inspectionMode) return
@@ -82,18 +90,18 @@ export default function App() {
     <main className="app">
       <header className="status">
         <h1>Hands Off My RAM!</h1>
-        <p>{inspectionMode ? 'Approved asset inspection' : 'Phase 3 city preview'}</p>
+        <p>{inspectionMode ? 'Approved asset inspection' : 'Opening theft and chase'}</p>
       </header>
       {!started ? (
         <div className="overlay">
-          <p>Explore the placeholder chase map.</p>
-          <button type="button" onClick={() => setStarted(true)}>Explore city</button>
+          <p>Ram Sam is coming for your RAM.</p>
+          <button type="button" onClick={() => setStarted(true)}>Start chase</button>
         </div>
       ) : (
         <SceneErrorBoundary>
-          {(!ready || (!inspectionMode && (!modelReady || !cityReady))) && <p className="loading" role="status">Loading scene…</p>}
+          {(!ready || (!inspectionMode && (!modelReady || !cityReady || !samReady))) && <p className="loading" role="status">Loading scene…</p>}
           <Canvas
-            aria-label={inspectionMode ? 'Approved asset inspection scene' : '3D placeholder city'}
+            aria-label={inspectionMode ? 'Approved asset inspection scene' : '3D RAM chase city'}
             camera={{ position: [0, 3.5, 5.5], fov: 50 }}
             dpr={[1, 2]}
             onCreated={() => setReady(true)}
@@ -111,14 +119,23 @@ export default function App() {
                 {preview && <primitive object={preview} />}
               </>
             ) : (
-              <PlayerScene pressed={pressed} paused={paused} motion={motion} onMotionChange={setMotion} onModelLoaded={onModelLoaded} onCityLoaded={onCityLoaded} onPositionChange={onPositionChange} />
+              <PlayerScene pressed={pressed} paused={paused} motion={motion} onMotionChange={setMotion} onModelLoaded={onModelLoaded} onCityLoaded={onCityLoaded} onSamLoaded={onSamLoaded} onPositionChange={onPositionChange} encounterPhase={encounterPhase} onEncounterPhaseChange={setEncounterPhase} onSamPositionChange={onSamPositionChange} sceneReady={modelReady && cityReady && samReady} />
             )}
           </Canvas>
           {!inspectionMode && (
+            <aside className="direction-indicator" aria-label={`Ram Sam ${Math.round(distance)} metres away`}>
+              <span className="direction-arrow" style={{ transform: `rotate(${direction}deg)` }}>↑</span>
+              <span>{encounterPhase === 'chase' ? `Chase Ram Sam · ${Math.round(distance)} m` : encounterPhase === 'steal' ? 'Ram Sam is grabbing your RAM!' : 'Ram Sam is opening a portal…'}</span>
+            </aside>
+          )}
+          {!inspectionMode && (
             <aside className="controls">
-              <p>WASD or arrow keys to explore · Esc to pause</p>
+              <p>{encounterPhase === 'chase' ? 'WASD or arrow keys to chase · Esc to pause' : 'Ram Sam is stealing your RAM…'}</p>
               <p>State: {paused ? 'Paused' : motion === 'run' ? 'Running' : 'Idle'}</p>
               <p data-testid="player-position">Position: {position.map((value) => value.toFixed(1)).join(', ')}</p>
+              <p data-testid="sam-position">Ram Sam: {samPosition.map((value) => value.toFixed(1)).join(', ')}</p>
+              <p data-testid="encounter-phase">Encounter: {encounterPhase}</p>
+              <p data-testid="ram-holder">RAM holder: {encounterPhase === 'chase' ? 'Ram Sam' : 'Player'}</p>
               <button type="button" onClick={() => { pressed.current.clear(); setPaused((value) => !value) }}>
                 {paused ? 'Resume' : 'Pause'}
               </button>

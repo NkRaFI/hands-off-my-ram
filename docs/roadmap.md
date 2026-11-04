@@ -15,7 +15,7 @@ The roadmap contains ten implementation phases followed by four controlled impro
 | 9 | Voices, dialogue, music, sound effects, subtitles | No |
 | 10 | Local saves, complete MVP QA, static deployment readiness | No |
 | 11 | Environment and lighting polish | Possibly; pause if needed |
-| 12 | Final character models, faces, clothing, RamAI branding | Yes; prerequisite gate |
+| 12 | Final faces, clothing refinements, and original character branding | Yes; prerequisite gate |
 | 13 | Final animations, expressions, and lip movement | Yes; prerequisite gate |
 | 14 | Performance optimization, compatibility, and release QA | Possibly |
 
@@ -31,8 +31,8 @@ The roadmap contains ten implementation phases followed by four controlled impro
 8. Commit the verified result.
 9. Stop and wait for the user to start the next phase.
 
-Asset discovery is preproduction work and is already complete. Phase 1 performs download/intake only. Phases 2–10 consume stable IDs from the manifest and may not select replacements.
+Asset discovery is preproduction work and is already complete. Phase 1 performed the original download/intake. The user-approved 2026-11-04 Ultimate Modular Men amendment supersedes the character role assignment; all later phases consume its recorded stable IDs and may not silently select replacements.
 
 ## MVP checkpoint
 
-At the end of Phase 10, the game is complete and deployable with cohesive open assets, even though final custom faces, clothing, animation cleanup, and environment polish remain later improvements.
+At the end of Phase 10, the game is complete and deployable with cohesive clothed open characters, even though final faces, original emblems, animation cleanup, and environment polish remain later improvements.

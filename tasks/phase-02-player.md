@@ -6,8 +6,8 @@ Add a placeholder player that can traverse a bounded test area with a comfortabl
 
 ## Included
 
-- Male player variant from `CHAR_QUATERNIUS_BASE`
-- Idle/run clips from `ANIM_QUATERNIUS_CORE`
+- Male player from `CHAR_QUATERNIUS_MODULAR_MEN` (`character.player`); this supersedes the original base-model assignment
+- Embedded idle/run clips from the selected model
 - Keyboard movement
 - Third-person follow camera
 - Ground/boundary collisions

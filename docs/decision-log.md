@@ -27,6 +27,9 @@
 | 2026-11-03 | Phase 3 uses a compact three-by-three road grid with five named landmarks and three reserved portal candidate zones | Multiple routes remain available around buildings while portal implementation stays in its later phase |
 | 2026-11-03 | Phase 3 batches repeated static city meshes with instancing | Shared geometry and materials reduce draw calls without altering the approved asset set |
 | 2026-11-03 | Player is male and uses the approved Quaternius male superhero base through the MVP | Corrects the earlier female player assignment; final clothing and face remain part of character polish |
+| 2026-11-04 | Supersede the base-character MVP assignment with Quaternius Ultimate Modular Men | The player, Ram Sam, and Rocket Elon need finished colorful clothing before polish; the user selected this pack |
+| 2026-11-04 | Use the creator's Poly Pizza distribution for Ultimate Modular Men | Quaternius's linked Google Drive files returned a quota-exceeded response; Poly Pizza supplies the same creator's CC0 pack with 11 GLBs and 24 embedded clips each |
+| 2026-11-04 | Use embedded Modular Men clips for the player and Ram Sam | The audited idle, run, interact, hit, and sword-slash clips avoid an unverified retarget from the older animation libraries |
 
 ## Deferred decisions
 
