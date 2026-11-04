@@ -15,8 +15,12 @@ button { font: inherit; cursor: pointer; padding: .7rem 1.1rem; border: 0; borde
 .controls { position: absolute; z-index: 1; right: 1rem; bottom: 1rem; width: min(23rem, calc(100vw - 2rem)); padding: .75rem; border-radius: .4rem; background: #162333e8; }
 .controls p { margin: 0 0 .4rem; font-size: .85rem; }
 .controls button { padding: .45rem .8rem; }
+.controls .attack-button { margin-right: .5rem; background: #ffd66d; }
+.controls .attack-feedback { color: #baff89; font-weight: 700; }
 .direction-indicator { position: absolute; z-index: 1; top: 1rem; right: 1rem; display: flex; align-items: center; gap: .65rem; max-width: min(18rem, calc(100vw - 2rem)); padding: .55rem .8rem; border-radius: .5rem; background: #241b42e8; border: 1px solid #a68cff; color: #fff; font-weight: 700; box-shadow: 0 3px 15px #34166a55; }
 .direction-arrow { display: inline-block; color: #9aff79; font-size: 1.7rem; line-height: 1; }
 .pause-overlay { position: absolute; z-index: 2; inset: 0; display: grid; place-content: center; justify-items: center; gap: 1rem; background: #16233399; }
 .pause-overlay p { margin: 0; font-size: 2rem; font-weight: 700; }
 .landmark-label { display: inline-block; white-space: nowrap; padding: .3rem .55rem; border-radius: .35rem; background: #172b3fe8; color: #f5f8ff; font: 700 14px system-ui, sans-serif; box-shadow: 0 2px 8px #0003; }
+.ram-drop-label, .hit-label { display: inline-block; white-space: nowrap; padding: .3rem .55rem; border-radius: .4rem; background: #183523e8; color: #aaff76; font: 800 15px system-ui, sans-serif; box-shadow: 0 2px 8px #0005; }
+.hit-label { background: #42243ce8; color: #ffe873; font-size: 22px; }

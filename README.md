@@ -6,7 +6,7 @@ An endless, browser-local, third-person 3D comedy chase game. Ram Sam arrives th
 
 ## Current status
 
-**Phase 4 opening chase implemented, with the Phase 3 map corrected to the approved Kenney city.** A clothed male player starts with RAM, Ram Sam emerges through a portal, steals it, and runs through Kenney City Kit Commercial buildings, City Kit Roads streets, and Nature Kit greenery. The player can pursue him using the direction cue. Bat combat and RAM recovery remain Phase 5 work.
+**Phase 5 chase combat implemented, with the approved Kenney city.** A clothed male player starts with RAM, Ram Sam steals it through a portal and runs, and the player can pursue, swing the bat, recover dropped RAM, and continue after Ram Sam's telegraphed portal return. NPCs and their theft loop remain Phase 6 work.
 
 This repository includes specifications, acceptance criteria, visual references, a locked asset manifest, licence rules, and agent instructions. Phase 1 fetched and verified the approved set. Implement one phase at a time and do not begin the next phase until the current phase is tested and accepted.
 
@@ -19,7 +19,7 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open the local URL printed by Vite, then select **Start chase**. Ram Sam steals the RAM after the opening portal sequence. Use WASD or arrow keys to pursue him and Escape or the on-screen button to pause and resume. The camera follows the player and moves closer when a building blocks its view. Append `?inspect=1` to the URL to load and preview the approved runtime assets.
+Open the local URL printed by Vite, then select **Start chase**. Ram Sam steals the RAM after the opening portal sequence. Use WASD or arrow keys to pursue him, Space, a canvas click, or **Swing bat** to attack, and Escape or the on-screen button to pause and resume. Move into a dropped RAM stick to recover it before Ram Sam escapes. The camera follows the player and moves closer when a building blocks its view. Append `?inspect=1` to the URL to load and preview the approved runtime assets.
 
 ```sh
 pnpm typecheck

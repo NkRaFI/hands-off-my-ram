@@ -79,13 +79,31 @@ try {
   const afterResize = await position()
   if (afterResize.x > resumed.x - 0.5) throw new Error('Arrow key movement failed after resize')
 
+  // Start a fresh opening so the first swing exercises the guaranteed nearby chase window.
+  await page.goto(baseUrl, { waitUntil: 'networkidle' })
+  await page.getByRole('button', { name: 'Start chase' }).click()
+  await page.locator('.loading').waitFor({ state: 'hidden' })
+  await page.getByTestId('encounter-phase').getByText('Encounter: chase').waitFor({ timeout: 30_000 })
+  await page.keyboard.press('Space')
+  await page.getByTestId('combat-stage').getByText('Combat: stunned').waitFor({ timeout: 5_000 })
+  if (await page.getByTestId('ram-holder').textContent() !== 'RAM holder: Ground') throw new Error('Hit did not drop RAM')
+  await page.keyboard.down('w')
+  await page.getByTestId('ram-score').getByText('RAM recovered: 1').waitFor({ timeout: 5_000 })
+  await page.keyboard.up('w')
+  await page.getByTestId('combat-stage').getByText('Combat: escape').waitFor({ timeout: 7_000 })
+  await page.getByTestId('combat-stage').getByText('Combat: reappear').waitFor({ timeout: 7_000 })
+  await page.getByTestId('combat-stage').getByText('Combat: chase').waitFor({ timeout: 7_000 })
+  if (await page.getByTestId('ram-score').textContent() !== 'RAM recovered: 1') throw new Error('Score reset after portal return')
+  await page.locator('canvas').click({ position: { x: 100, y: 300 } })
+  await page.getByRole('status').getByText('Move closer and face Ram Sam.').waitFor({ timeout: 5_000 })
+
   await page.goto(new URL('?inspect=1', baseUrl).toString(), { waitUntil: 'networkidle' })
   await page.getByRole('button', { name: 'Inspect approved assets' }).click()
   await page.getByRole('status').filter({ hasText: /All approved runtime assets|Asset errors:/ }).waitFor({ timeout: 120_000 })
   const result = await page.getByRole('status').last().textContent()
   if (!result?.includes('All approved runtime assets loaded successfully.')) throw new Error(result || 'Inspection failed')
   if (errors.length) throw new Error(`Browser console errors: ${errors.join(' | ')}`)
-  console.log('Opening theft, Ram Sam chase, city movement, collisions, pause/resume, resize, approved assets, and browser console passed.')
+  console.log('Opening theft, chase, movement, collision, pause/resume, resize, bat hit, RAM recovery, escape/return, approved assets, and browser console passed.')
 } finally {
   await browser.close()
 }

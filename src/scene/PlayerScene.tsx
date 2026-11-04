@@ -1,20 +1,25 @@
 import { Suspense, useEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import { createPortal, useFrame, useThree } from '@react-three/fiber'
-import { useGLTF } from '@react-three/drei'
+import { Html, useGLTF } from '@react-three/drei'
 import { CapsuleCollider, Physics, RigidBody, useBeforePhysicsStep, useRapier, type RapierRigidBody } from '@react-three/rapier'
 import { AnimationMixer, Box3, Group, Vector3 } from 'three'
 import { assetUrl } from '../game/assets/asset-manifest'
 import { movementVelocity, type Motion } from '../game/player/movement'
 import { advanceEncounter, initialEncounter, PORTAL_SECONDS, SAM_START, type EncounterPhase } from '../game/ram-sam/encounter'
+import { advanceCombat, attemptAttack, collectRam, initialCombat, waypointAfter, type AttackResult, type CombatState, type Point } from '../game/ram-sam/combat'
 import { CityColliders, CityLayout } from './city/CityLayout'
 
 const BODY_HEIGHT = 0.87
 const IDLE_CLIP = 'CharacterArmature|Idle'
 const RUN_CLIP = 'CharacterArmature|Run'
 const INTERACT_CLIP = 'CharacterArmature|Interact'
+const ATTACK_CLIP = 'CharacterArmature|Sword_Slash'
+const HIT_CLIP = 'CharacterArmature|HitRecieve'
 
 type PlayerSceneProps = {
   pressed: RefObject<Set<string>>
+  attackRequests: RefObject<number>
+  facingRef: RefObject<number>
   paused: boolean
   motion: Motion
   onMotionChange: (motion: Motion) => void
@@ -22,13 +27,16 @@ type PlayerSceneProps = {
   onCityLoaded: () => void
   onSamLoaded: () => void
   onPositionChange: (x: number, y: number, z: number) => void
+  playerPosition: [number, number, number]
   encounterPhase: EncounterPhase
   onEncounterPhaseChange: (phase: EncounterPhase) => void
   onSamPositionChange: (x: number, z: number) => void
+  onCombatChange: (state: CombatState) => void
+  onAttackResult: (result: AttackResult) => void
   sceneReady: boolean
 }
 
-function Character({ id, motion, paused, carryingRam, onLoaded }: { id: 'character.player' | 'character.sam'; motion: Motion | 'interact'; paused: boolean; carryingRam: boolean; onLoaded?: () => void }) {
+function Character({ id, motion, paused, carryingRam, holdingBat = false, onLoaded }: { id: 'character.player' | 'character.sam'; motion: Motion | 'interact' | 'attack' | 'hit'; paused: boolean; carryingRam: boolean; holdingBat?: boolean; onLoaded?: () => void }) {
   const character = useGLTF(assetUrl(id))
   const mixer = useMemo(() => new AnimationMixer(character.scene), [character.scene])
   const wrist = useMemo(() => {
@@ -41,10 +49,11 @@ function Character({ id, motion, paused, carryingRam, onLoaded }: { id: 'charact
   useEffect(() => { onLoaded?.() }, [onLoaded])
 
   useEffect(() => {
-    const name = motion === 'run' ? RUN_CLIP : motion === 'interact' ? INTERACT_CLIP : IDLE_CLIP
+    const name = motion === 'run' ? RUN_CLIP : motion === 'interact' ? INTERACT_CLIP : motion === 'attack' ? ATTACK_CLIP : motion === 'hit' ? HIT_CLIP : IDLE_CLIP
     const clip = character.animations.find((item) => item.name === name)
     if (!clip) throw new Error(`Missing approved animation clip: ${name}`)
     const action = mixer.clipAction(clip)
+    if (motion === 'attack' || motion === 'hit') action.timeScale = Math.max(1, clip.duration / 0.55)
     action.reset().fadeIn(0.18).play()
     return () => { action.fadeOut(0.18) }
   }, [character.animations, mixer, motion])
@@ -58,25 +67,38 @@ function Character({ id, motion, paused, carryingRam, onLoaded }: { id: 'charact
         <RamProp />
       </group>, wrist,
     )}
+    {holdingBat && createPortal(
+      <group position={[0, 0.0007, 0]} scale={0.01}>
+        <BatProp />
+      </group>, wrist,
+    )}
   </>
 }
 
-function RamProp() {
-  const model = useGLTF(assetUrl('prop.ram'))
+function PropModel({ id, length }: { id: 'prop.ram' | 'prop.bat'; length: number }) {
+  const model = useGLTF(assetUrl(id))
   const scene = useMemo(() => {
     const scene = model.scene.clone(true)
     const bounds = new Box3().setFromObject(scene)
     const size = bounds.getSize(new Vector3())
     const center = bounds.getCenter(new Vector3())
-    const scale = 0.34 / Math.max(size.x, size.y, size.z, 0.001)
+    const scale = length / Math.max(size.x, size.y, size.z, 0.001)
     scene.scale.setScalar(scale)
     scene.position.copy(center).multiplyScalar(-scale)
     return scene
-  }, [model.scene])
-  return <group rotation={[0.2, 0, -0.3]}><primitive object={scene} /></group>
+  }, [model.scene, length])
+  return <primitive object={scene} />
 }
 
-function Portal({ elapsed, paused }: { elapsed: number; paused: boolean }) {
+function RamProp() {
+  return <group rotation={[0.2, 0, -0.3]}><PropModel id="prop.ram" length={0.34} /></group>
+}
+
+function BatProp() {
+  return <group position={[0.3, 0, 0]} rotation={[0, 0, 1.1]}><PropModel id="prop.bat" length={0.8} /></group>
+}
+
+function Portal({ elapsed, paused, position = SAM_START }: { elapsed: number; paused: boolean; position?: Point }) {
   const ring = useRef<Group>(null)
   useFrame((_, delta) => {
     if (!ring.current || paused) return
@@ -84,7 +106,7 @@ function Portal({ elapsed, paused }: { elapsed: number; paused: boolean }) {
     ring.current.scale.setScalar(Math.min(1, 0.15 + elapsed / PORTAL_SECONDS))
   })
   return (
-    <group ref={ring} position={[SAM_START.x, 1.45, SAM_START.z]}>
+    <group ref={ring} position={[position.x, 1.45, position.z]}>
       <mesh>
         <torusGeometry args={[1.35, 0.16, 10, 32]} />
         <meshStandardMaterial color="#a75cff" emissive="#7b22f8" emissiveIntensity={2.4} />
@@ -101,21 +123,67 @@ function Portal({ elapsed, paused }: { elapsed: number; paused: boolean }) {
   )
 }
 
-function RamSam({ paused, sceneReady, onLoaded, onPhaseChange, onPositionChange }: { paused: boolean; sceneReady: boolean; onLoaded: () => void; onPhaseChange: (phase: EncounterPhase) => void; onPositionChange: (x: number, z: number) => void }) {
+function DroppedRam({ at, paused }: { at: Point; paused: boolean }) {
+  const visual = useRef<Group>(null)
+  const elapsed = useRef(0)
+  useFrame((_, delta) => {
+    if (!visual.current || paused) return
+    elapsed.current += delta
+    visual.current.rotation.y = elapsed.current * 1.4
+    visual.current.position.y = 0.35 + Math.sin(elapsed.current * 4) * 0.08
+  })
+  return <group position={[at.x, 0, at.z]}>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.045, 0]}>
+      <ringGeometry args={[0.38, 0.48, 24]} />
+      <meshBasicMaterial color="#92ff58" transparent opacity={0.8} side={2} />
+    </mesh>
+    <group ref={visual}><PropModel id="prop.ram" length={0.55} /></group>
+    <Html position={[0, 1.05, 0]} center distanceFactor={12} style={{ pointerEvents: 'none' }}>
+      <span className="ram-drop-label">RAM! Grab it</span>
+    </Html>
+  </group>
+}
+
+function RamSam({ paused, sceneReady, onLoaded, onEncounterPhaseChange, onPositionChange, onCombatChange, onAttackResult, attackRequests, facingRef, playerPosition }: Pick<PlayerSceneProps, 'paused' | 'sceneReady' | 'onEncounterPhaseChange' | 'onCombatChange' | 'onAttackResult' | 'attackRequests' | 'facingRef' | 'playerPosition'> & { onLoaded: () => void; onPositionChange: (x: number, z: number) => void }) {
   const state = useRef(initialEncounter())
+  const combat = useRef(initialCombat())
   const actor = useRef<Group>(null)
   const [phase, setPhase] = useState<EncounterPhase>('portal')
+  const [combatView, setCombatView] = useState<CombatState>(initialCombat)
+  const [visualPosition, setVisualPosition] = useState<Point>(SAM_START)
   const [portalElapsed, setPortalElapsed] = useState(0)
   const sync = useRef(0)
+  const lastAttack = useRef(0)
 
   useFrame((_, delta) => {
     if (paused || !sceneReady) return
+    const step = Math.min(delta, 0.1)
     const previous = state.current
-    const next = advanceEncounter(previous, Math.min(delta, 0.1))
+    let next = previous.phase !== 'chase' || combat.current.stage === 'chase' ? advanceEncounter(previous, step) : previous
+    const previousCombat = combat.current
+    let nextCombat = previousCombat
+    if (next.phase === 'chase') {
+      const player = { x: playerPosition[0], z: playerPosition[2] }
+      nextCombat = advanceCombat(nextCombat, step, player)
+      if (nextCombat.stage === 'reappear' && previousCombat.stage !== 'reappear' && nextCombat.portal) {
+        next = { ...next, x: nextCombat.portal.x, z: nextCombat.portal.z, waypoint: waypointAfter(nextCombat.portal) }
+      }
+      if (attackRequests.current !== lastAttack.current) {
+        lastAttack.current = attackRequests.current
+        const attack = attemptAttack(nextCombat, player, { x: next.x, z: next.z }, facingRef.current)
+        nextCombat = attack.state
+        onAttackResult(attack.result)
+      }
+      nextCombat = collectRam(nextCombat, player)
+      if (nextCombat.stage !== previousCombat.stage || nextCombat.score !== previousCombat.score || nextCombat.holder !== previousCombat.holder) {
+        onCombatChange(nextCombat)
+      }
+      combat.current = nextCombat
+    }
     state.current = next
     if (next.phase !== previous.phase) {
       setPhase(next.phase)
-      onPhaseChange(next.phase)
+      onEncounterPhaseChange(next.phase)
       if (previous.phase === 'portal') setPortalElapsed(PORTAL_SECONDS)
     }
     if (next.phase === 'portal' && Math.abs(next.elapsed - portalElapsed) > 0.08) setPortalElapsed(next.elapsed)
@@ -129,22 +197,31 @@ function RamSam({ paused, sceneReady, onLoaded, onPhaseChange, onPositionChange 
     if (sync.current >= 0.1) {
       sync.current = 0
       onPositionChange(next.x, next.z)
+      setVisualPosition({ x: next.x, z: next.z })
+      if (next.phase === 'chase' && nextCombat.stage !== 'chase') setCombatView(nextCombat)
+    }
+    if (nextCombat.stage !== previousCombat.stage || nextCombat.score !== previousCombat.score || nextCombat.holder !== previousCombat.holder) {
+      setCombatView(nextCombat)
     }
   })
 
   return (
     <>
       {phase !== 'chase' && <Portal elapsed={portalElapsed} paused={paused} />}
+      {phase === 'chase' && combatView.stage === 'escape' && <Portal elapsed={combatView.elapsed} paused={paused} position={visualPosition} />}
+      {phase === 'chase' && combatView.stage === 'reappear' && combatView.portal && <Portal elapsed={PORTAL_SECONDS} paused={paused} position={combatView.portal} />}
+      {combatView.drop && <DroppedRam at={combatView.drop} paused={paused} />}
+      {combatView.stage === 'stunned' && <Html position={[visualPosition.x, 2.3, visualPosition.z]} center distanceFactor={13} style={{ pointerEvents: 'none' }}><span className="hit-label">★ ★ ★</span></Html>}
       <group ref={actor} position={[SAM_START.x, 0, SAM_START.z]}>
         <Suspense fallback={null}>
-          <Character id="character.sam" motion={phase === 'portal' ? 'idle' : phase === 'steal' ? 'interact' : 'run'} paused={paused} carryingRam={phase === 'chase'} onLoaded={onLoaded} />
+          <Character id="character.sam" motion={phase === 'portal' ? 'idle' : phase === 'steal' ? 'interact' : phase !== 'chase' || combatView.stage === 'chase' ? 'run' : combatView.stage === 'stunned' && combatView.elapsed < 0.6 ? 'hit' : 'idle'} paused={paused} carryingRam={phase === 'chase' && combatView.holder === 'sam'} onLoaded={onLoaded} />
         </Suspense>
       </group>
     </>
   )
 }
 
-function Player({ pressed, paused, motion, onMotionChange, onModelLoaded, onPositionChange, encounterPhase }: PlayerSceneProps) {
+function Player({ pressed, attackRequests, facingRef, paused, motion, onMotionChange, onModelLoaded, onPositionChange, encounterPhase }: PlayerSceneProps) {
   const body = useRef<RapierRigidBody>(null)
   const visual = useRef<Group>(null)
   const { camera } = useThree()
@@ -156,6 +233,9 @@ function Player({ pressed, paused, motion, onMotionChange, onModelLoaded, onPosi
   const cameraRay = useRef(new rapier.Ray({ x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 1 }))
   const wantedMotion = useRef<Motion>('idle')
   const positionSync = useRef(0)
+  const lastAttack = useRef(0)
+  const attackTime = useRef(0)
+  const [attacking, setAttacking] = useState(false)
 
   useBeforePhysicsStep(() => {
     const rigidBody = body.current
@@ -178,6 +258,15 @@ function Player({ pressed, paused, motion, onMotionChange, onModelLoaded, onPosi
   }, [paused, onMotionChange])
 
   useFrame((_, delta) => {
+    if (!paused && attackRequests.current !== lastAttack.current) {
+      lastAttack.current = attackRequests.current
+      attackTime.current = 0.6
+      setAttacking(true)
+    }
+    if (!paused && attackTime.current > 0) {
+      attackTime.current -= delta
+      if (attackTime.current <= 0) setAttacking(false)
+    }
     const position = body.current?.translation()
     if (!position) return
     positionSync.current += delta
@@ -205,6 +294,7 @@ function Player({ pressed, paused, motion, onMotionChange, onModelLoaded, onPosi
       const difference = Math.atan2(Math.sin(heading - visual.current.rotation.y), Math.cos(heading - visual.current.rotation.y))
       visual.current.rotation.y += difference * (1 - Math.exp(-12 * Math.min(delta, 0.1)))
     }
+    if (visual.current) facingRef.current = visual.current.rotation.y
   })
 
   return (
@@ -212,7 +302,7 @@ function Player({ pressed, paused, motion, onMotionChange, onModelLoaded, onPosi
       <CapsuleCollider args={[0.55, 0.32]} />
       <group ref={visual} position={[0, -BODY_HEIGHT, 0]} rotation={[0, Math.PI, 0]}>
         <Suspense fallback={null}>
-          <Character id="character.player" motion={motion} paused={paused} carryingRam={encounterPhase !== 'chase'} onLoaded={onModelLoaded} />
+          <Character id="character.player" motion={attacking ? 'attack' : motion} paused={paused} carryingRam={encounterPhase !== 'chase'} holdingBat={encounterPhase === 'chase'} onLoaded={onModelLoaded} />
         </Suspense>
       </group>
     </RigidBody>
@@ -231,7 +321,7 @@ export function PlayerScene(props: PlayerSceneProps) {
           <CityLayout onLoaded={props.onCityLoaded} />
         </Suspense>
         <Player {...props} paused={props.paused || props.encounterPhase !== 'chase'} />
-        <RamSam paused={props.paused} sceneReady={props.sceneReady} onLoaded={props.onSamLoaded} onPhaseChange={props.onEncounterPhaseChange} onPositionChange={props.onSamPositionChange} />
+        <RamSam paused={props.paused} sceneReady={props.sceneReady} onLoaded={props.onSamLoaded} onEncounterPhaseChange={props.onEncounterPhaseChange} onPositionChange={props.onSamPositionChange} onCombatChange={props.onCombatChange} onAttackResult={props.onAttackResult} attackRequests={props.attackRequests} facingRef={props.facingRef} playerPosition={props.playerPosition} />
       </Physics>
     </>
   )

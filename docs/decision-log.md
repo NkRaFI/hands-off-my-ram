@@ -32,6 +32,7 @@
 | 2026-11-04 | Use embedded Modular Men clips for the player and Ram Sam | The audited idle, run, interact, hit, and sword-slash clips avoid an unverified retarget from the older animation libraries |
 | 2026-11-04 | Supersede the active Downtown city with Kenney City Kit Commercial, City Kit Roads, and Nature Kit | The user chose a matching polygon city and character direction; the existing three-by-three road graph and chase routes remain in use while the rendered buildings, streets, lamps, trees, and bushes use the approved Kenney packs |
 | 2026-11-04 | Require a finished city within the Phase 10 MVP | The user may never pursue post-MVP character polishing, but wants the city visually complete before release; Phase 10 now owns distinct landmarks, public-space detail, palette, lighting, and route and performance verification, while Phase 11 is optional extras |
+| 2026-11-05 | Phase 5 uses deterministic bat hits, timed RAM drops, and safe portal returns | A generous forward hit cone and variable stun window make the first recovery easy to learn; the farthest approved portal junction gives a clear escape and repeatable chase without adding NPC systems |
 
 ## Deferred decisions
 
