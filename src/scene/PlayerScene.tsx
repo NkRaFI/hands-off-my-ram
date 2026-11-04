@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useMemo, useRef, useState, type RefObject } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
+import { createPortal, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import { CapsuleCollider, Physics, RigidBody, useBeforePhysicsStep, useRapier, type RapierRigidBody } from '@react-three/rapier'
 import { AnimationMixer, Box3, Group, Vector3 } from 'three'
@@ -31,6 +31,12 @@ type PlayerSceneProps = {
 function Character({ id, motion, paused, carryingRam, onLoaded }: { id: 'character.player' | 'character.sam'; motion: Motion | 'interact'; paused: boolean; carryingRam: boolean; onLoaded?: () => void }) {
   const character = useGLTF(assetUrl(id))
   const mixer = useMemo(() => new AnimationMixer(character.scene), [character.scene])
+  const wrist = useMemo(() => {
+    // GLTFLoader strips the dot from the source bone name `Wrist.R`.
+    const bone = character.scene.getObjectByName('WristR')
+    if (!bone) throw new Error(`Missing right wrist on approved character: ${id}`)
+    return bone
+  }, [character.scene, id])
 
   useEffect(() => { onLoaded?.() }, [onLoaded])
 
@@ -45,7 +51,14 @@ function Character({ id, motion, paused, carryingRam, onLoaded }: { id: 'charact
 
   useFrame((_, delta) => { if (!paused) mixer.update(Math.min(delta, 0.1)) })
 
-  return <><primitive object={character.scene} />{carryingRam && <RamProp />}</>
+  return <>
+    <primitive object={character.scene} />
+    {carryingRam && createPortal(
+      <group position={[0, 0.0007, 0]} scale={0.01}>
+        <RamProp />
+      </group>, wrist,
+    )}
+  </>
 }
 
 function RamProp() {
@@ -60,7 +73,7 @@ function RamProp() {
     scene.position.copy(center).multiplyScalar(-scale)
     return scene
   }, [model.scene])
-  return <group position={[0.35, 1.2, 0.05]} rotation={[0.2, 0, -0.3]}><primitive object={scene} /></group>
+  return <group rotation={[0.2, 0, -0.3]}><primitive object={scene} /></group>
 }
 
 function Portal({ elapsed, paused }: { elapsed: number; paused: boolean }) {

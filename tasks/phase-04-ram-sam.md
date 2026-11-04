@@ -28,11 +28,12 @@ Implement the opening encounter and a reliable basic chase target.
 - State transitions cannot leave Ram Sam missing or immobile.
 - The player always has a readable direction cue.
 - The player and Ram Sam use the verified clothed models; the RAM prop changes carrier at theft.
+- The visible RAM stays attached to the current carrier's animated hand during idle, theft, and running.
 
 ## Manual test
 
-1. Start the chase and confirm the clothed male player carries the RAM while Ram Sam appears through the portal.
-2. Confirm Ram Sam approaches, steals the RAM, and begins running while the player gains movement control.
+1. Start the chase and confirm the clothed male player holds the RAM in his hand while Ram Sam appears through the portal.
+2. Confirm Ram Sam approaches, steals the RAM, and begins running while the player gains movement control. The RAM should follow Ram Sam's hand as his arm moves.
 3. Follow Ram Sam around several city roads. Confirm he remains visible and does not cross building footprints.
 4. Confirm the direction cue points toward Ram Sam as the player turns and moves.
 5. Pause and resume during the chase, resize to a narrow viewport, and check the browser console for errors.

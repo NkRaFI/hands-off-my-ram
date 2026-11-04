@@ -23,10 +23,11 @@ Build a compact, navigable low-poly chase map using approved open assets.
 - The player cannot walk through primary buildings.
 - Every included asset has verified licence metadata.
 - The map remains readable and performant at the gameplay camera distance.
+- Road and paving surfaces align with the character feet, and greenery renders above the surface without dark underside artifacts.
 
 ## Manual test
 
-1. Start the local app and select **Start chase**. Confirm the clothed male player, Kenney roads, paving, buildings, trees, lamps, named landmarks, and daylight scene are visible at the gameplay camera distance.
+1. Start the local app and select **Start chase**. Confirm the clothed male player, Kenney roads, paving, buildings, trees, lamps, named landmarks, and daylight scene are visible at the gameplay camera distance. Check that shoes remain visible above the road and the small bushes appear green above the paving.
 2. Walk from the central junction toward the RamAI Data Centre, then into its east wall. Confirm movement stops at the building and the camera keeps the player visible.
 3. Follow the streets around the central blocks. Confirm the two road approaches to each landmark remain open and the lamps and greenery do not block a route.
 4. Resize the browser to a narrow mobile viewport. Confirm the canvas fits and movement still works.
