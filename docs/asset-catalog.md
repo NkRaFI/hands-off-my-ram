@@ -10,7 +10,10 @@ Asset discovery is complete for the gameplay MVP. This is an approved manifest, 
 | `CHAR_QUATERNIUS_MODULAR_MEN` | [Quaternius Ultimate Modular Men via Poly Pizza](https://poly.pizza/bundle/Ultimate-Modular-Men-Pack-ZiH8muWqwQ) | Clothed male player, Ram Sam, Rocket Elon, and four male NPC variants | CC0 |
 | `ANIM_QUATERNIUS_CORE` | [Quaternius Universal Animation Library](https://quaternius.com/packs/universalanimationlibrary.html) | Retained Phase 1 legacy runtime clips; active characters use embedded clips | CC0 |
 | `ANIM_QUATERNIUS_ACTION` | [Quaternius Universal Animation Library 2](https://quaternius.com/packs/universalanimationlibrary2.html) | Retained Phase 1 legacy runtime clips; active characters use embedded clips | CC0 |
-| `ENV_QUATERNIUS_DOWNTOWN` | [Quaternius Downtown City MegaKit](https://quaternius.com/packs/downtowncitymegakit.html) | Buildings, urban props, and primary city kit | CC0 |
+| `ENV_QUATERNIUS_DOWNTOWN` | [Quaternius Downtown City MegaKit](https://quaternius.com/packs/downtowncitymegakit.html) | Retained legacy Phase 1 city files; not rendered by the active map | CC0 |
+| `ENV_KENNEY_COMMERCIAL` | [Kenney City Kit Commercial](https://kenney.nl/assets/city-kit-commercial) | Active landmark and skyline buildings | CC0 |
+| `ENV_KENNEY_ROADS` | [Kenney City Kit Roads](https://kenney.nl/assets/city-kit-roads) | Active road grid, paving, lamps, and traffic light | CC0 |
+| `ENV_KENNEY_NATURE` | [Kenney Nature Kit](https://kenney.nl/assets/nature-kit) | Active trees and bushes | CC0 |
 | `PROP_POLYPIZZA_BAT` | [Baseball Bat by CreativeTrio](https://poly.pizza/m/i2JCd3w8gh) | Player weapon | CC0 |
 | `PROP_POLYPIZZA_RAM` | [RAM by iPoly3D](https://poly.pizza/m/obBMPOGYvy) | Stolen, carried, dropped, and collected RAM stick | CC0 |
 | `PROP_POLYPIZZA_ROCKET` | [Rocket by hat_my_guy](https://poly.pizza/m/9awwTQWYux) | Space Assist arrival/portal landmark | CC0 |
@@ -21,6 +24,8 @@ Asset discovery is complete for the gameplay MVP. This is an approved manifest, 
 | `MUSIC_OGA_ACTION5` | [5 Chiptunes (Action) by SubspaceAudio/Juhani Junkala](https://opengameart.org/content/5-chiptunes-action) | Approved five-track loopable music pool; Phase 9 assigns tracks to gameplay states | CC0 |
 
 Quaternius and Kenney publish the selected packs as CC0. The individual Poly Pizza and OpenGameArt pages identify the selected items as CC0. The archives and internal filenames were audited before implementation; see `asset-audit-report.md` and `runtime-asset-manifest.csv`.
+
+The 2026-11-04 map amendment replaces active Downtown city placements with the three Kenney packs above. The existing route graph and portal candidate zones remain. Kenney road and building GLBs use their archived color-map PNGs; the road GLB image URI is renamed to keep the two distinct color maps side by side.
 
 ## Original project assets (not third-party downloads)
 

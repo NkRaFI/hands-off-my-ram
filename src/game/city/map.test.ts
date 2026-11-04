@@ -4,7 +4,7 @@ import {
   reachableNodes, ROAD_HALF_WIDTH, ROAD_LINES, roadEdges, roadNodes, SIDEWALK_WIDTH,
 } from './map'
 
-describe('placeholder city layout', () => {
+describe('Kenney city layout', () => {
   it('keeps two road approaches open to every landmark even if one road link is blocked', () => {
     const plaza = nodeId(0, 0)
     for (const landmark of landmarks) {

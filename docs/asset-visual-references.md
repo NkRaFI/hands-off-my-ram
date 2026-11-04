@@ -17,9 +17,12 @@ The player, Ram Sam, Rocket Elon, and male NPCs use finished clothed models from
 
 | Stable ID | What to inspect | Preview/source |
 |---|---|---|
-| `ENV_QUATERNIUS_DOWNTOWN` | Modular buildings, urban props, storefronts, rooftop shapes, and the overall low-poly city style | [Downtown City MegaKit — Quaternius](https://quaternius.com/packs/downtowncitymegakit.html) |
+| `ENV_QUATERNIUS_DOWNTOWN` | Retained legacy city source; no active map placements | [Downtown City MegaKit — Quaternius](https://quaternius.com/packs/downtowncitymegakit.html) |
+| `ENV_KENNEY_COMMERCIAL` | Polygon commercial buildings and skyline | [City Kit Commercial — Kenney](https://kenney.nl/assets/city-kit-commercial) |
+| `ENV_KENNEY_ROADS` | Matching roads, paving, street lamps, and crossing | [City Kit Roads — Kenney](https://kenney.nl/assets/city-kit-roads) |
+| `ENV_KENNEY_NATURE` | Matching low-poly trees and bushes | [Nature Kit — Kenney](https://kenney.nl/assets/nature-kit) |
 
-The reference image is a color-and-composition target, not a promise that the unmodified packs look identical. Phase 3 composes and lights these exact packs to approach the vibrant reference.
+The reference image is a color-and-composition target, not a promise that the unmodified packs look identical. The active Phase 3 map composes and lights the three Kenney packs above; further visual polish belongs to later documented phases.
 
 ## Gameplay props
 

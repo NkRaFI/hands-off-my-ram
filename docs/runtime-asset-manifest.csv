@@ -24,17 +24,17 @@ animation.bat-swing,ANIM_QUATERNIUS_CORE,clip: Sword_Attack,,5,Retained legacy a
 animation.action,ANIM_QUATERNIUS_ACTION,Unreal-Godot/UAL2_Standard.glb,8091444,7,Retained legacy animation container or clip from original Phase 1 intake,Defer load until needed
 animation.knockback,ANIM_QUATERNIUS_ACTION,clip: Hit_Knockback,,5,Retained legacy animation container or clip from original Phase 1 intake,Reference clip from animation.action
 animation.rocket-idle,ANIM_QUATERNIUS_ACTION,clip: Idle_FoldArms_Loop,,7,Retained legacy animation container or clip from original Phase 1 intake,Reference clip from animation.action
-city.building.large,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Building_Large_2.gltf + .bin,3368108,3,Large city building,Pack as GLB and share converted texture set
-city.building.medium,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Building_Medium_2_001.gltf + .bin,2468532,3,Medium city building,Pack as GLB and share converted texture set
-city.building.small,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Building_Small_1.gltf + .bin,1583535,3,Small city building,Pack as GLB and share converted texture set
-city.street.straight,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Street_2Lane.gltf + .bin,22276,3,Straight street,Pack as GLB
-city.street.t,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Street_TIntersection.gltf + .bin,65074,3,T intersection,Pack as GLB
-city.street.cross,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Street_4WayIntersection.gltf + .bin,60792,3,Four-way intersection,Pack as GLB
-city.street.curve,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Street_Curve_2Lane.gltf + .bin,32653,3,Curved street,Pack as GLB
-city.sidewalk.straight,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Sidewalk_Straight_3m.gltf + .bin,6882,3,Straight sidewalk,Pack as GLB
-city.sidewalk.corner,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Sidewalk_Corner_Round_3m.gltf + .bin,11620,3,Sidewalk corner,Pack as GLB
-city.prop.bollard,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Prop_Bollard.gltf + .bin,12534,3,Street dressing,Pack as GLB
-city.prop.planter,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Prop_Planter_Single.gltf + .bin,13560,3,Street dressing,Pack as GLB
+city.building.large,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Building_Large_2.gltf + .bin,3368108,3,Retained legacy city asset from original Phase 1 intake,Pack as GLB and share converted texture set
+city.building.medium,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Building_Medium_2_001.gltf + .bin,2468532,3,Retained legacy city asset from original Phase 1 intake,Pack as GLB and share converted texture set
+city.building.small,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Building_Small_1.gltf + .bin,1583535,3,Retained legacy city asset from original Phase 1 intake,Pack as GLB and share converted texture set
+city.street.straight,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Street_2Lane.gltf + .bin,22276,3,Retained legacy city asset from original Phase 1 intake,Pack as GLB
+city.street.t,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Street_TIntersection.gltf + .bin,65074,3,Retained legacy city asset from original Phase 1 intake,Pack as GLB
+city.street.cross,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Street_4WayIntersection.gltf + .bin,60792,3,Retained legacy city asset from original Phase 1 intake,Pack as GLB
+city.street.curve,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Street_Curve_2Lane.gltf + .bin,32653,3,Retained legacy city asset from original Phase 1 intake,Pack as GLB
+city.sidewalk.straight,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Sidewalk_Straight_3m.gltf + .bin,6882,3,Retained legacy city asset from original Phase 1 intake,Pack as GLB
+city.sidewalk.corner,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Sidewalk_Corner_Round_3m.gltf + .bin,11620,3,Retained legacy city asset from original Phase 1 intake,Pack as GLB
+city.prop.bollard,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Prop_Bollard.gltf + .bin,12534,3,Retained legacy city asset from original Phase 1 intake,Pack as GLB
+city.prop.planter,ENV_QUATERNIUS_DOWNTOWN,Exports/glTF (Godot)/Prop_Planter_Single.gltf + .bin,13560,3,Retained legacy city asset from original Phase 1 intake,Pack as GLB
 prop.bat,PROP_POLYPIZZA_BAT,66659244-e1d4-4a55-8135-e570818e8190.glb,31240,5,Player bat,Rename only unless validation requires optimization
 prop.ram,PROP_POLYPIZZA_RAM,59e547df-c0e3-457f-929f-118d88015d15.glb,62872,4,RAM stick and collectible,Rename only unless validation requires optimization
 prop.rocket,PROP_POLYPIZZA_ROCKET,244c027c-40f0-45ca-a707-0f8e855c9831.glb,63396,7,Space Assist rocket,Rename only unless validation requires optimization
@@ -65,3 +65,20 @@ music.explore,MUSIC_OGA_ACTION5,Juhani Junkala [Retro Game Music Pack] Level 1.w
 music.chase,MUSIC_OGA_ACTION5,Juhani Junkala [Retro Game Music Pack] Level 2.wav,12841642,9,Chase loop,Convert to browser-compatible compressed audio
 music.crisis,MUSIC_OGA_ACTION5,Juhani Junkala [Retro Game Music Pack] Level 3.wav,14446802,9,Cloud takeover crisis,Convert to browser-compatible compressed audio
 music.assist,MUSIC_OGA_ACTION5,Juhani Junkala [Retro Game Music Pack] Ending.wav,7876878,9,Space Assist and reward sting,Convert and edit a short derivative clip
+city.kenney.building.large,ENV_KENNEY_COMMERCIAL,Models/GLB format/building-n.glb,341232,3,Data centre landmark,Copy approved GLB unchanged; scale and place in scene
+city.kenney.building.medium,ENV_KENNEY_COMMERCIAL,Models/GLB format/building-j.glb,440652,3,Gaming landmark,Copy approved GLB unchanged; scale and place in scene
+city.kenney.building.small,ENV_KENNEY_COMMERCIAL,Models/GLB format/building-a.glb,108936,3,Shop cafe and residential landmarks,Copy approved GLB unchanged; scale and place in scene
+city.kenney.building.tall,ENV_KENNEY_COMMERCIAL,Models/GLB format/building-skyscraper-a.glb,111336,3,Background skyline,Copy approved GLB unchanged; scale and place in scene
+city.kenney.road.straight,ENV_KENNEY_ROADS,Models/GLB format/road-straight.glb,5248,3,Straight road tile,Copy approved GLB with image URI renamed to Textures/colormad.png; scale and place in scene
+city.kenney.road.crossroad,ENV_KENNEY_ROADS,Models/GLB format/road-crossroad.glb,10084,3,Central four-way junction,Copy approved GLB with image URI renamed to Textures/colormad.png; scale and place in scene
+city.kenney.road.intersection,ENV_KENNEY_ROADS,Models/GLB format/road-intersection.glb,7900,3,Outer T junctions,Copy approved GLB with image URI renamed to Textures/colormad.png; scale and place in scene
+city.kenney.road.bend,ENV_KENNEY_ROADS,Models/GLB format/road-bend-square.glb,6268,3,Outer road corners,Copy approved GLB with image URI renamed to Textures/colormad.png; scale and place in scene
+city.kenney.road.crossing,ENV_KENNEY_ROADS,Models/GLB format/road-crossing.glb,8700,3,Pedestrian crossing,Copy approved GLB with image URI renamed to Textures/colormad.png; scale and place in scene
+city.kenney.road.tile,ENV_KENNEY_ROADS,Models/GLB format/tile-low.glb,2800,3,Sidewalk and plaza paving,Copy approved GLB with image URI renamed to Textures/colormad.png; scale and place in scene
+city.kenney.road.lamp,ENV_KENNEY_ROADS,Models/GLB format/light-square.glb,6996,3,Street lamps,Copy approved GLB with image URI renamed to Textures/colormad.png; scale and place in scene
+city.kenney.road.traffic-light,ENV_KENNEY_ROADS,Models/GLB format/traffic-light.glb,20344,3,Junction detail,Copy approved GLB with image URI renamed to Textures/colormad.png; scale and place in scene
+city.kenney.nature.tree,ENV_KENNEY_NATURE,Models/GLTF format/tree_default.glb,9428,3,Street tree,Copy approved GLB unchanged; scale and place in scene
+city.kenney.nature.tree-fat,ENV_KENNEY_NATURE,Models/GLTF format/tree_fat.glb,5576,3,Large street tree,Copy approved GLB unchanged; scale and place in scene
+city.kenney.nature.bush,ENV_KENNEY_NATURE,Models/GLTF format/plant_bushSmall.glb,3212,3,Small planter greenery,Copy approved GLB unchanged; scale and place in scene
+city.kenney.texture.commercial,ENV_KENNEY_COMMERCIAL,Models/GLB format/Textures/colormap.png,11002,3,Commercial GLB colour map,Copy approved PNG unchanged
+city.kenney.texture.roads,ENV_KENNEY_ROADS,Models/GLB format/Textures/colormap.png,11428,3,Roads GLB colour map,Copy approved PNG unchanged; road GLB image URI renamed to avoid texture name collision

@@ -63,3 +63,15 @@ The user selected Quaternius Ultimate Modular Men for finished clothed character
 - Selected runtime models: Casual Character, Hoodie Character, Astronaut, Worker, Business Man, Punk, and Swat. The first three serve the player, Ram Sam, and Rocket Elon; the latter four are reserved NPC variants.
 - Verified embedded clips include `CharacterArmature|Idle`, `CharacterArmature|Walk`, `CharacterArmature|Run`, `CharacterArmature|Interact`, `CharacterArmature|HitRecieve`, and `CharacterArmature|Sword_Slash` in every selected model. The spelling `HitRecieve` is the source clip name.
 - The seven selected GLBs were copied unchanged. Individual runtime checksums are in `runtime-asset-checksums.csv`.
+
+## 2026-11-04 Kenney city amendment
+
+The user selected a matching Kenney polygon city after the original Downtown city was built. Official Kenney downloads were checked against the included CC0 `License.txt`; all source ZIPs remain outside the repository.
+
+| Source | Download size | SHA-256 |
+|---|---:|---|
+| City Kit Commercial 2.1 | 4,096,974 B | `f8b09b081c2bb88bcc126e2dec1cb40fd0dad7e7e591b6c26aaefe96fb35276b` |
+| City Kit Roads | 2,852,289 B | `374a4552115cbd11b4ec5c930ee31a533562dc78a09af249a655d03f7ea3b959` |
+| Nature Kit | 10,537,521 B | `fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d` |
+
+The active map uses four commercial buildings, eight roads and street props, three nature models, and two shared color-map PNGs. The distinct commercial and road color maps had the same source filename. Road GLB image URIs were changed to `Textures/colormad.png` to keep both color maps alongside the models. The exact selected files and transformations are in `runtime-asset-manifest.csv`; individual SHA-256 values are in `runtime-asset-checksums.csv`.

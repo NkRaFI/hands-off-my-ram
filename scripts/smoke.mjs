@@ -47,7 +47,8 @@ try {
   await page.waitForTimeout(3000)
   await page.keyboard.up('a')
   const blocked = await position()
-  if (blocked.x < -10 || blocked.x > -8.5) throw new Error(`Player crossed the large building: ${JSON.stringify(blocked)}`)
+  // Kenney's large building has a 23.2 m footprint at x=-20; its east wall is near x=-8.4.
+  if (blocked.x < -8.6 || blocked.x > -7.6) throw new Error(`Player crossed the large building: ${JSON.stringify(blocked)}`)
   if (blocked.y < 0.7 || blocked.y > 1.1) throw new Error(`Player fell through or floated above the ground: ${JSON.stringify(blocked)}`)
   const arrowTransform = await page.locator('.direction-arrow').evaluate((element) => element.style.transform)
   if (!arrowTransform || arrowTransform === 'rotate(0deg)') throw new Error('Direction cue did not respond to player movement')

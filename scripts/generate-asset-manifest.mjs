@@ -13,6 +13,11 @@ for (const { id, sourceId, sourceFile } of rows) {
     entries.set(id, { url: entries.get(parent).url, clip: sourceFile.slice(5).trim(), sourceId })
     continue
   }
+  if (id === 'city.kenney.texture.commercial' || id === 'city.kenney.texture.roads') {
+    const name = id.endsWith('.roads') ? 'colormad.png' : 'colormap.png'
+    entries.set(id, { url: `/assets/models/Textures/${name}`, sourceId })
+    continue
+  }
   const filename = id.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
   const folder = sourceFile.endsWith('.png') ? 'ui' : sourceFile.endsWith('.wav') || sourceFile.endsWith('.ogg') ? 'audio' : 'models'
   const extension = sourceFile.endsWith('.png') ? 'png' : sourceFile.endsWith('.ogg') ? 'ogg' : sourceFile.endsWith('.wav') ? 'm4a' : 'glb'

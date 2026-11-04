@@ -67,6 +67,23 @@ export const assetManifest = {
   "music.chase": {"url":"/assets/audio/music-chase.m4a","sourceId":"MUSIC_OGA_ACTION5"},
   "music.crisis": {"url":"/assets/audio/music-crisis.m4a","sourceId":"MUSIC_OGA_ACTION5"},
   "music.assist": {"url":"/assets/audio/music-assist.m4a","sourceId":"MUSIC_OGA_ACTION5"},
+  "city.kenney.building.large": {"url":"/assets/models/city-kenney-building-large.glb","sourceId":"ENV_KENNEY_COMMERCIAL"},
+  "city.kenney.building.medium": {"url":"/assets/models/city-kenney-building-medium.glb","sourceId":"ENV_KENNEY_COMMERCIAL"},
+  "city.kenney.building.small": {"url":"/assets/models/city-kenney-building-small.glb","sourceId":"ENV_KENNEY_COMMERCIAL"},
+  "city.kenney.building.tall": {"url":"/assets/models/city-kenney-building-tall.glb","sourceId":"ENV_KENNEY_COMMERCIAL"},
+  "city.kenney.road.straight": {"url":"/assets/models/city-kenney-road-straight.glb","sourceId":"ENV_KENNEY_ROADS"},
+  "city.kenney.road.crossroad": {"url":"/assets/models/city-kenney-road-crossroad.glb","sourceId":"ENV_KENNEY_ROADS"},
+  "city.kenney.road.intersection": {"url":"/assets/models/city-kenney-road-intersection.glb","sourceId":"ENV_KENNEY_ROADS"},
+  "city.kenney.road.bend": {"url":"/assets/models/city-kenney-road-bend.glb","sourceId":"ENV_KENNEY_ROADS"},
+  "city.kenney.road.crossing": {"url":"/assets/models/city-kenney-road-crossing.glb","sourceId":"ENV_KENNEY_ROADS"},
+  "city.kenney.road.tile": {"url":"/assets/models/city-kenney-road-tile.glb","sourceId":"ENV_KENNEY_ROADS"},
+  "city.kenney.road.lamp": {"url":"/assets/models/city-kenney-road-lamp.glb","sourceId":"ENV_KENNEY_ROADS"},
+  "city.kenney.road.traffic-light": {"url":"/assets/models/city-kenney-road-traffic-light.glb","sourceId":"ENV_KENNEY_ROADS"},
+  "city.kenney.nature.tree": {"url":"/assets/models/city-kenney-nature-tree.glb","sourceId":"ENV_KENNEY_NATURE"},
+  "city.kenney.nature.tree-fat": {"url":"/assets/models/city-kenney-nature-tree-fat.glb","sourceId":"ENV_KENNEY_NATURE"},
+  "city.kenney.nature.bush": {"url":"/assets/models/city-kenney-nature-bush.glb","sourceId":"ENV_KENNEY_NATURE"},
+  "city.kenney.texture.commercial": {"url":"/assets/models/Textures/colormap.png","sourceId":"ENV_KENNEY_COMMERCIAL"},
+  "city.kenney.texture.roads": {"url":"/assets/models/Textures/colormad.png","sourceId":"ENV_KENNEY_ROADS"},
 } as const
 
 export type AssetId = keyof typeof assetManifest

@@ -8,27 +8,28 @@ import {
 } from '../../game/city/map'
 
 const cityModelIds = [
-  'city.building.large', 'city.building.medium', 'city.building.small',
-  'city.street.straight', 'city.street.t', 'city.street.cross', 'city.street.curve',
-  'city.sidewalk.straight', 'city.sidewalk.corner', 'city.prop.bollard', 'city.prop.planter',
+  'city.kenney.building.large', 'city.kenney.building.medium', 'city.kenney.building.small',
+  'city.kenney.building.tall', 'city.kenney.road.straight', 'city.kenney.road.crossroad',
+  'city.kenney.road.intersection', 'city.kenney.road.bend', 'city.kenney.road.crossing',
+  'city.kenney.road.tile', 'city.kenney.road.lamp', 'city.kenney.road.traffic-light',
+  'city.kenney.nature.tree', 'city.kenney.nature.tree-fat', 'city.kenney.nature.bush',
 ] as const satisfies readonly CityModelId[]
 
 const cityUrls = cityModelIds.map(assetUrl)
-const segmentCenters = [-20, 20]
-const planterPositions = [-7.5, 7.5].flatMap((x) => [-7.5, 7.5].map((z) => [x, z] as const))
-const bollardPositions = [-22, 22].flatMap((at) => [
-  [-7.5, at], [7.5, at], [at, -7.5], [at, 7.5],
-] as const)
+const segmentCenters = [-30, -20, -10, 10, 20, 30]
+const lampPositions = [-6, 6].flatMap((x) => [-6, 6].map((z) => [x, z] as const))
+const outerLampPositions = [-34, 34].flatMap((x) => [-34, 34].map((z) => [x, z] as const))
+const TREE_SCALE = 5
+const ROAD_SCALE = 10
 
 type Placement = {
   position: [number, number, number]
   rotation: number
   scale: [number, number, number]
-  offset: [number, number, number]
 }
 
-function placement(position: Placement['position'], rotation = 0, scale: Placement['scale'] = [1, 1, 1], offset: Placement['offset'] = [0, 0, 0]): Placement {
-  return { position, rotation, scale, offset }
+function placement(position: Placement['position'], rotation = 0, scale: Placement['scale'] = [1, 1, 1]): Placement {
+  return { position, rotation, scale }
 }
 
 const cityPlacements = cityModelIds.reduce((result, id) => {
@@ -38,28 +39,41 @@ const cityPlacements = cityModelIds.reduce((result, id) => {
 function add(id: CityModelId, item: Placement) { cityPlacements[id].push(item) }
 
 for (const line of ROAD_LINES) for (const center of segmentCenters) {
-  add('city.street.straight', placement([line, 0.16, center], 0, [2, 1, 28 / 12]))
-  add('city.street.straight', placement([center, 0.16, line], Math.PI / 2, [2, 1, 28 / 12]))
-  for (const side of [-7.5, 7.5]) {
-    add('city.sidewalk.straight', placement([line + side, 0.04, center], 0, [1, 1, 28 / 3]))
-    add('city.sidewalk.straight', placement([center, 0.04, line + side], Math.PI / 2, [1, 1, 28 / 3]))
-  }
+  const verticalId = line === 0 && center === -10 ? 'city.kenney.road.crossing' : 'city.kenney.road.straight'
+  add(verticalId, placement([line, 0.02, center], 0, [ROAD_SCALE, ROAD_SCALE, ROAD_SCALE]))
+  add('city.kenney.road.straight', placement([center, 0.02, line], Math.PI / 2, [ROAD_SCALE, ROAD_SCALE, ROAD_SCALE]))
 }
-add('city.street.cross', placement([0, 0.16, 0], 0, [0.5, 1, 0.5]))
+add('city.kenney.road.crossroad', placement([0, 0.02, 0], 0, [ROAD_SCALE, ROAD_SCALE, ROAD_SCALE]))
 for (const site of [
   { x: 0, z: -40, rotation: 0 }, { x: 40, z: 0, rotation: Math.PI / 2 },
   { x: 0, z: 40, rotation: Math.PI }, { x: -40, z: 0, rotation: -Math.PI / 2 },
-]) add('city.street.t', placement([site.x, 0.16, site.z], site.rotation, [0.5, 1, 0.5], [0, 0, 1.665]))
+]) add('city.kenney.road.intersection', placement([site.x, 0.02, site.z], site.rotation, [ROAD_SCALE, ROAD_SCALE, ROAD_SCALE]))
 for (const site of [
   { x: -40, z: -40, rotation: 0 }, { x: 40, z: -40, rotation: -Math.PI / 2 },
   { x: -40, z: 40, rotation: Math.PI / 2 }, { x: 40, z: 40, rotation: Math.PI },
-]) add('city.street.curve', placement([site.x, 0.16, site.z], site.rotation, [1, 1, 1], [-6, 0, -6]))
-for (const [x, z] of planterPositions) add('city.prop.planter', placement([x, 0.04, z]))
-for (const [x, z] of bollardPositions) add('city.prop.bollard', placement([x, 0.04, z]))
-for (const x of [-7.5, 7.5]) for (const z of [-7.5, 7.5]) add('city.sidewalk.corner', placement([x, 0.04, z]))
+]) add('city.kenney.road.bend', placement([site.x, 0.02, site.z], site.rotation, [ROAD_SCALE, ROAD_SCALE, ROAD_SCALE]))
+
+// The Kenney paving tiles fill every block, including the plaza, without covering roads.
+for (let x = -60; x <= 60; x += 10) for (let z = -60; z <= 60; z += 10) {
+  if (ROAD_LINES.includes(x as -40 | 0 | 40) || ROAD_LINES.includes(z as -40 | 0 | 40)) continue
+  add('city.kenney.road.tile', placement([x, 0.01, z], 0, [ROAD_SCALE, ROAD_SCALE, ROAD_SCALE]))
+}
+
+for (const [x, z] of [...lampPositions, ...outerLampPositions]) {
+  add('city.kenney.road.lamp', placement([x, 0.02, z], Math.PI / 2, [7, 7, 7]))
+}
+add('city.kenney.road.traffic-light', placement([6, 0.02, -34], 0, [7, 7, 7]))
+for (const [x, z] of [[-54, -54], [54, -54], [-54, 54], [54, 54], [-60, 0], [60, 0]]) {
+  add('city.kenney.nature.tree', placement([x, 0.02, z], 0, [TREE_SCALE, TREE_SCALE, TREE_SCALE]))
+}
+for (const [x, z] of [[-60, -60], [60, 60]]) {
+  add('city.kenney.nature.tree-fat', placement([x, 0.02, z], 0, [6, 6, 6]))
+}
+for (const x of [-8, 8]) for (const z of [-8, 8]) {
+  add('city.kenney.nature.bush', placement([x, 0.02, z], 0, [5, 5, 5]))
+}
 for (const building of cityBuildings) {
-  const spec = buildingModels[building.model]
-  add(building.model, placement([building.position[0], 0, building.position[1]], building.rotation, [1, 1, 1], [-spec.sourceCenter[0], 0, -spec.sourceCenter[1]]))
+  add(building.model, placement([building.position[0], 0.02, building.position[1]], building.rotation, [10, 10, 10]))
 }
 
 function CityBatchPart({ source, placements }: { source: Mesh; placements: Placement[] }) {
@@ -69,7 +83,7 @@ function CityBatchPart({ source, placements }: { source: Mesh; placements: Place
       new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), item.rotation),
       new Vector3(...item.scale),
     )
-    return transform.multiply(new Matrix4().makeTranslation(...item.offset)).multiply(source.matrixWorld)
+    return transform.multiply(source.matrixWorld)
   }), [source, placements])
   const setMesh = useCallback((mesh: InstancedMesh | null) => {
     if (!mesh) return
@@ -96,7 +110,7 @@ function CityGeometry({ models }: { models: Record<CityModelId, Object3D> }) {
     <>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0]} receiveShadow>
         <planeGeometry args={[CITY_LIMIT * 2, CITY_LIMIT * 2]} />
-        <meshStandardMaterial color="#b8c9bb" />
+        <meshStandardMaterial color="#cce8b8" />
       </mesh>
       {cityModelIds.map((id) => <CityInstances key={id} model={models[id]} placements={cityPlacements[id]} />)}
       {landmarks.map((site) => (
@@ -128,11 +142,8 @@ export function CityColliders() {
           />
         )
       })}
-      {planterPositions.map(([x, z]) => (
-        <CuboidCollider key={`planter-${x}-${z}`} args={[1, 0.3, 1]} position={[x, 0.3, z]} />
-      ))}
-      {bollardPositions.map(([x, z]) => (
-        <BallCollider key={`bollard-${x}-${z}`} args={[0.12]} position={[x, 0.48, z]} />
+      {[...lampPositions, ...outerLampPositions].map(([x, z]) => (
+        <BallCollider key={`lamp-${x}-${z}`} args={[0.25]} position={[x, 0.25, z]} />
       ))}
     </RigidBody>
   )
