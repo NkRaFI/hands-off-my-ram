@@ -2,7 +2,7 @@ import { Suspense, useEffect, useMemo, useRef, useState, type RefObject } from '
 import { createPortal, useFrame, useThree } from '@react-three/fiber'
 import { Html, useGLTF } from '@react-three/drei'
 import { CapsuleCollider, Physics, RigidBody, useBeforePhysicsStep, useRapier, type RapierRigidBody } from '@react-three/rapier'
-import { AnimationMixer, Box3, Group, Vector3 } from 'three'
+import { AnimationMixer, Box3, Group, Object3D, Quaternion, Vector3 } from 'three'
 import { assetUrl } from '../game/assets/asset-manifest'
 import { movementVelocity, type Motion } from '../game/player/movement'
 import { advanceEncounter, initialEncounter, PORTAL_SECONDS, SAM_START, type EncounterPhase } from '../game/ram-sam/encounter'
@@ -11,6 +11,7 @@ import { CityColliders, CityLayout } from './city/CityLayout'
 
 const BODY_HEIGHT = 0.87
 const IDLE_CLIP = 'CharacterArmature|Idle'
+const WEAPON_IDLE_CLIP = 'CharacterArmature|Idle_Sword'
 const RUN_CLIP = 'CharacterArmature|Run'
 const INTERACT_CLIP = 'CharacterArmature|Interact'
 const ATTACK_CLIP = 'CharacterArmature|Sword_Slash'
@@ -45,20 +46,45 @@ function Character({ id, motion, paused, carryingRam, holdingBat = false, onLoad
     if (!bone) throw new Error(`Missing right wrist on approved character: ${id}`)
     return bone
   }, [character.scene, id])
+  const gripPose = useMemo(() => {
+    if (!holdingBat) return []
+    const clip = character.animations.find((item) => item.name === WEAPON_IDLE_CLIP)
+    if (!clip) throw new Error(`Missing approved weapon idle clip: ${WEAPON_IDLE_CLIP}`)
+    const fingers = clip.tracks.flatMap((track) => {
+      const name = track.name.replace(/\.quaternion$/, '').split('/').at(-1) ?? ''
+      if (!/^(Index|Middle|Ring|Pinky|Thumb)[1-4]R$/.test(name) || !track.name.endsWith('.quaternion')) return []
+      const bone = character.scene.getObjectByName(name)
+      return bone ? [{ bone, rotation: new Quaternion().fromArray(track.values, 0) }] : []
+    })
+    if (fingers.length < 10) throw new Error('Approved character is missing the sword-grip finger pose')
+    return fingers
+  }, [character.animations, character.scene, holdingBat])
+  const palmBones = useMemo(() => {
+    if (!holdingBat) return null
+    const knuckle = character.scene.getObjectByName('Middle1R')
+    const middle = character.scene.getObjectByName('Middle2R')
+    const thumb = character.scene.getObjectByName('Thumb2R')
+    if (!knuckle || !middle || !thumb) throw new Error('Approved character is missing the right palm joints')
+    return { knuckle, middle, thumb }
+  }, [character.scene, holdingBat])
 
   useEffect(() => { onLoaded?.() }, [onLoaded])
 
   useEffect(() => {
-    const name = motion === 'run' ? RUN_CLIP : motion === 'interact' ? INTERACT_CLIP : motion === 'attack' ? ATTACK_CLIP : motion === 'hit' ? HIT_CLIP : IDLE_CLIP
+    const name = motion === 'run' ? RUN_CLIP : motion === 'interact' ? INTERACT_CLIP : motion === 'attack' ? ATTACK_CLIP : motion === 'hit' ? HIT_CLIP : holdingBat ? WEAPON_IDLE_CLIP : IDLE_CLIP
     const clip = character.animations.find((item) => item.name === name)
     if (!clip) throw new Error(`Missing approved animation clip: ${name}`)
     const action = mixer.clipAction(clip)
     if (motion === 'attack' || motion === 'hit') action.timeScale = Math.max(1, clip.duration / 0.55)
     action.reset().fadeIn(0.18).play()
     return () => { action.fadeOut(0.18) }
-  }, [character.animations, mixer, motion])
+  }, [character.animations, mixer, motion, holdingBat])
 
-  useFrame((_, delta) => { if (!paused) mixer.update(Math.min(delta, 0.1)) })
+  useFrame((_, delta) => {
+    if (paused) return
+    mixer.update(Math.min(delta, 0.1))
+    if (holdingBat && motion !== 'attack') for (const finger of gripPose) finger.bone.quaternion.copy(finger.rotation)
+  })
 
   return <>
     <primitive object={character.scene} />
@@ -67,15 +93,13 @@ function Character({ id, motion, paused, carryingRam, holdingBat = false, onLoad
         <RamProp />
       </group>, wrist,
     )}
-    {holdingBat && createPortal(
-      <group position={[0, 0.0007, 0]} scale={0.01}>
-        <BatProp />
-      </group>, wrist,
+    {holdingBat && palmBones && createPortal(
+      <BatProp attacking={motion === 'attack'} paused={paused} wrist={wrist} palmBones={palmBones} />, wrist,
     )}
   </>
 }
 
-function PropModel({ id, length }: { id: 'prop.ram' | 'prop.bat'; length: number }) {
+function PropModel({ id, length, anchor = 'center' }: { id: 'prop.ram' | 'prop.bat'; length: number; anchor?: 'center' | 'bat-grip' }) {
   const model = useGLTF(assetUrl(id))
   const scene = useMemo(() => {
     const scene = model.scene.clone(true)
@@ -84,9 +108,15 @@ function PropModel({ id, length }: { id: 'prop.ram' | 'prop.bat'; length: number
     const center = bounds.getCenter(new Vector3())
     const scale = length / Math.max(size.x, size.y, size.z, 0.001)
     scene.scale.setScalar(scale)
-    scene.position.copy(center).multiplyScalar(-scale)
+    if (anchor === 'bat-grip') {
+      // The approved bat's narrow handle is at its negative-X end. Place the
+      // hand 8 cm in from that end, then rotate the bat around the grip.
+      scene.position.set(-bounds.min.x * scale - 0.08, -center.y * scale, -center.z * scale)
+    } else {
+      scene.position.copy(center).multiplyScalar(-scale)
+    }
     return scene
-  }, [model.scene, length])
+  }, [model.scene, length, anchor])
   return <primitive object={scene} />
 }
 
@@ -94,8 +124,27 @@ function RamProp() {
   return <group rotation={[0.2, 0, -0.3]}><PropModel id="prop.ram" length={0.34} /></group>
 }
 
-function BatProp() {
-  return <group position={[0.3, 0, 0]} rotation={[0, 0, 1.1]}><PropModel id="prop.bat" length={0.8} /></group>
+function BatProp({ attacking, paused, wrist, palmBones }: { attacking: boolean; paused: boolean; wrist: Object3D; palmBones: { knuckle: Object3D; middle: Object3D; thumb: Object3D } }) {
+  const anchor = useRef<Group>(null)
+  const grip = useRef<Group>(null)
+  const palmPoint = useRef(new Vector3())
+  const middlePoint = useRef(new Vector3())
+  const thumbPoint = useRef(new Vector3())
+  useFrame((_, delta) => {
+    if (!anchor.current || !grip.current || paused) return
+    palmBones.knuckle.getWorldPosition(palmPoint.current)
+    palmBones.middle.getWorldPosition(middlePoint.current)
+    palmBones.thumb.getWorldPosition(thumbPoint.current)
+    palmPoint.current.lerp(middlePoint.current, 0.65).lerp(thumbPoint.current, 0.25)
+    wrist.worldToLocal(palmPoint.current)
+    anchor.current.position.copy(palmPoint.current)
+    const target = attacking ? 1.1 : 1.1 + Math.PI
+    const difference = Math.atan2(Math.sin(target - grip.current.rotation.z), Math.cos(target - grip.current.rotation.z))
+    grip.current.rotation.z += difference * (1 - Math.exp(-14 * Math.min(delta, 0.1)))
+  })
+  return <group ref={anchor} scale={0.01}>
+    <group ref={grip} rotation={[0, 0, 1.1 + Math.PI]}><PropModel id="prop.bat" length={0.8} anchor="bat-grip" /></group>
+  </group>
 }
 
 function Portal({ elapsed, paused, position = SAM_START }: { elapsed: number; paused: boolean; position?: Point }) {

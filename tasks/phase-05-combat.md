@@ -29,7 +29,7 @@ Make the first complete playable interaction: catch Ram Sam, attack, and recover
 
 ## Manual test
 
-1. Start the chase. Confirm the bat appears in the player's hand after the opening theft and follows the swing animation.
+1. Start the chase. Confirm the bat handle passes through the player's closed right palm, with the handle end below the fist, in idle and running poses. Confirm it stays in the palm through the swing animation. Check both front and rear views.
 2. Press Space near and facing Ram Sam. Confirm a hit reaction, star feedback, a visible RAM drop, and a pickup prompt. Click the canvas for a second swing attempt; confirm mouse input also works. Try a swing from farther away and confirm it does not count as a hit.
 3. Walk into the dropped RAM before the vulnerability window ends. Confirm the drop disappears, the recovery count increases once, and the RAM enters the player's inventory.
 4. Wait for the escape warning and portal. Confirm Ram Sam reappears at a clear, reachable road junction and resumes the chase with another RAM stick. Repeat a hit and pickup cycle to confirm the game does not get stuck.
